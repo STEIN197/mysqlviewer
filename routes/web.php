@@ -1,18 +1,18 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ApiController;
+use App\Http\Middleware\Main;
+use Illuminate\Http\Request;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware(Main::class)->group(function() {
+	Route::prefix('api')->group(function() {
+		Route::get('/', [ApiController::class, 'index']);
+		Route::get('db', function(Request $request) {
+			return 1;
+		});
+	});
+	Route::get('/', [LoginController::class, 'index']);
+	Route::post('/', [LoginController::class, 'login']);
 });

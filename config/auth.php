@@ -15,7 +15,7 @@ return [
 
     'defaults' => [
         'guard' => 'web',
-        'passwords' => 'users',
+        // 'passwords' => 'users',
     ],
 
     /*
@@ -37,12 +37,14 @@ return [
 
     'guards' => [
         'web' => [
-            'driver' => 'session',
+			'driver' => 'mysql',
+            // 'driver' => 'session',
             'provider' => 'users',
         ],
 
         'api' => [
             'driver' => 'token',
+            // 'driver' => 'session',
             'provider' => 'users',
             'hash' => false,
         ],

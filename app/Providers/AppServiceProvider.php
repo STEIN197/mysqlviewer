@@ -3,6 +3,10 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Blade;
+use App\Http\Middleware\Main;
+use Illuminate\Support\Facades\Auth;
+use App\Auth\Guards\MySQLGuard;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +17,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton(Main::class, function($app) {
+			return new Main();
+		});
     }
 
     /**
@@ -23,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+		Auth::extend('mysql', function ($app) {
+            return new MySQLGuard($app['request']);
+        });
     }
 }
