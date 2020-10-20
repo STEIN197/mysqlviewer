@@ -4,24 +4,30 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class FormField extends Component
-{
+class FormField extends Component {
 
-	public ?string $type;
-	public ?string $placeholder;
-	public ?string $name;
-	public ?array $items;
-	public ?string $activeItem;
+	public $type;
+	public $name;
+	public $placeholder;
+	public $default;
+	public $class;
+	public $required;
+	public $items;
+	public $activeItem;
+	
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($type, $name, $placeholder, $items = null, $activeItem = null)
+    public function __construct($type, $name, $placeholder, $default = '', $class = '', $required = false, $items = null, $activeItem = null)
     {
-		$this->type = $type;
-		$this->placeholder = $placeholder;
+		$this->type = strtolower($type);
 		$this->name = $name;
+		$this->placeholder = $placeholder;
+		$this->default = $default;
+		$this->class = $class;
+		$this->required = $required;
 		$this->items = $items;
 		$this->activeItem = $activeItem;
     }
@@ -31,8 +37,7 @@ class FormField extends Component
      *
      * @return \Illuminate\View\View|string
      */
-    public function render()
-    {
+    public function render() {
         return view('components.form-field');
     }
 }

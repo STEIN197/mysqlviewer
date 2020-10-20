@@ -14,7 +14,8 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
+		// 'guard' => 'web',
+		'guard' => 'mysql'
         // 'passwords' => 'users',
     ],
 
@@ -37,8 +38,8 @@ return [
 
     'guards' => [
         'web' => [
-			'driver' => 'mysql',
-            // 'driver' => 'session',
+			// 'driver' => 'mysql',
+            'driver' => 'session',
             'provider' => 'users',
         ],
 
@@ -47,7 +48,12 @@ return [
             // 'driver' => 'session',
             'provider' => 'users',
             'hash' => false,
-        ],
+		],
+		'mysql' => [
+			// 'driver' => 'session',
+			'driver' => 'mysql',
+			'provider' => 'mysql'
+		]
     ],
 
     /*
@@ -69,9 +75,13 @@ return [
 
     'providers' => [
         'users' => [
-            'driver' => 'eloquent',
+            // 'driver' => 'eloquent',
+            'driver' => 'mysql',
             'model' => App\Models\User::class,
-        ],
+		],
+		'mysql' => [
+			'driver' => 'mysql'
+		]
 
         // 'users' => [
         //     'driver' => 'database',

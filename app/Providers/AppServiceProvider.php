@@ -29,8 +29,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-		Auth::extend('mysql', function ($app) {
-            return new MySQLGuard($app['request']);
-        });
+		
     }
 }

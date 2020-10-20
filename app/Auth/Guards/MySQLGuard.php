@@ -2,27 +2,18 @@
 namespace App\Auth\Guards;
 
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
-use Illuminate\Auth\AuthenticationException;
+use App\Models\MySQLUser;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 
-/**
- * Class PinGuard
- */
-class MySQLGuard implements Guard
-{
-    protected $user;
-    protected $request;
 
-    public function __construct(Request $request)
-    {
-        $this->request = $request;
-    }
+class MySQLGuard implements Guard {
+
+    protected $user;
 
     public function check(): bool {
-        return (bool) $this->user();
+        return $this->user() !== null;
     }
 
     public function guest(): bool {
@@ -30,52 +21,28 @@ class MySQLGuard implements Guard
     }
 
     public function id(): ?string {
-        $user = $this->user();
-        return $user->id ?? null;
-    }
-
-    public function setUser(?Authenticatable $user): self {
-        $this->user = $user;
-        return $this;
+		return $this->user() ? $this->user()->getAuthIdentifier() : null;
     }
 
     public function validate(array $credentials = []): bool {
-        throw new \BadMethodCallException('Unexpected method call');
+		return $this->user->getAuthIdentifier() === $credentials['username'] && $this->user->getAuthPassword() === $credentials['password'];
     }
+	
+	public function user(): ?Authenticatable {
+		return $this->user ?? $this->user = session()->get('user');
+	}
 
-    public function authenticate(): User
-    {
-        $user = $this->user();
-        if ($user instanceof User) {
-            return $user;
-        }
-        throw new AuthenticationException();
-    }
+	public function setUser(?Authenticatable $user): void {
+		$this->user = $user;
+	}
 
-    public function user(): ?User
-    {
-        return $this->user ?: $this->signIn();
-    }
+	public function login(array $credentials): bool {
+		$this->user = MySQLUser::retrieveByCredentials($credentials);
+		return $this->user !== null;
+	}
 
-    /**
-     * Sign in using requested PIN.
-     *
-     * @return null|User
-     */
-    protected function signIn(): ?User
-    {
-        $user = new User;
-		$user->username = $this->request->input('username');
-		$user->password = Hash::make($this->request->input('password'));
-		return $user;
-    }
-
-    /**
-     * Logout user.
-     */
-    public function logout(): void {
-        if ($this->user) {
-            $this->setUser(null);
-        }
-    }
+	public function logout(): void {
+		$this->user = null;
+		session()->forget('user');
+	}
 }
