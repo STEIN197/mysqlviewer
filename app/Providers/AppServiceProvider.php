@@ -3,10 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Blade;
 use App\Http\Middleware\Main;
-use Illuminate\Support\Facades\Auth;
-use App\Auth\Guards\MySQLGuard;
+use App\Models\MySQLUser;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +17,9 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(Main::class, function($app) {
 			return new Main();
+		});
+		$this->app->bind(MySQLUser::class, function($app) {
+			return session()->get('user');
 		});
     }
 

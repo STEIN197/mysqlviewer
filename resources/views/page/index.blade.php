@@ -1,20 +1,13 @@
-
-{{-- {{ var_dump(session()->get('user')) }} --}}
-@if (auth()->check())
-authenticated
-@else
-not authenticated
-@endif
 <section class="d-flex">
 	<div class="container">
 		<div class="row">
 			<div class="col col-4 offset-4">
 				<form action="" method="post" class="pd-20 border">
 					@csrf
-					@error('connection')
-						<p class="alert alert-danger">@lang('auth.error')</p>
-					@enderror
 					<p class="text-center fw-bold fs-18">@lang('auth.auth')</p>
+					@error('connection')
+						<p class="alert alert-danger pd-10">@lang('auth.error')</p>
+					@enderror
 					<x-form-field type="text" name="host" :placeholder="__('auth.host')" default="localhost" required="true"/>
 					<x-form-field type="text" name="username" :placeholder="__('auth.user')" required="true"/>
 					<x-form-field type="password" name="password" :placeholder="__('auth.password')" required="true"/>

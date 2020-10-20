@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\AdminController;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\Main;
 
@@ -14,13 +15,17 @@ Route::middleware(Main::class)->group(function() {
 			return 1;
 		});
 	});
-	Route::get('/', [LoginController::class, 'index'])->name('index');
-	Route::post('/', [LoginController::class, 'login']);
 	Route::get('/logout/', [LoginController::class, 'logout'])->name('logout');
-
+	
 	Route::middleware(Authenticate::class)->group(function() {
-		Route::get('/home/', function() {
-			echo 'home';
+		Route::get('/', [LoginController::class, 'index'])->name('index');
+		Route::post('/', [LoginController::class, 'login']);
+		Route::prefix('admin')->group(function() {
+			Route::get('/', [AdminController::class, 'index'])->name('admin');
+			Route::name('admin.')->group(function() {
+				Route::get('/tables/', [AdminController::class, 'tables'])->name('tables');
+				Route::get('/sql/', [AdminController::class, 'sql'])->name('sql');
+			});
 		});
 	});
 });

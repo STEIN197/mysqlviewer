@@ -7,13 +7,17 @@ use Illuminate\Contracts\Auth\Authenticatable;
 
 class MySQLUser extends Model implements Authenticatable {
 
-	private $name;
-	private $password;
-	private $rememberToken;
+	protected $server;
+	protected $name;
+	protected $password;
+	protected $database;
+	protected $rememberToken;
 
-	public function __construct($name, $password, $rememberToken = '') {
+	public function __construct(string $name, ?string $password = null, ?string $database = null, ?string $host = 'localhost', $rememberToken = '') {
 		$this->name = $name;
 		$this->password = $password;
+		$this->database = $database;
+		$this->host = $host;
 		$this->rememberToken = $rememberToken;
 	}
 	
@@ -41,13 +45,17 @@ class MySQLUser extends Model implements Authenticatable {
 		return null;
 	}
 
+	public function getDatabase(): ?string {
+		return $this->database;
+	}
+
 	public static function retrieveByCredentials(array $credentials): ?self {
 		try {
 			$connection = env('DB_CONNECTION', 'mysql');
 			$host = env('DB_HOST', 'localhost');
 			$port = env('DB_PORT', '3306');
-			$pdo = new \PDO("{$connection}:host={$host};port={$port}", $credentials['username'], $credentials['password']);
-			$user = new self($credentials['username'], $credentials['password']);
+			$user = new self($credentials['username'], $credentials['password'], $credentials['database'], $credentials['host']);
+			$pdo = new \PDO("{$connection}:host={$host};port={$port}", $user->getAuthIdentifier(), $user->getAuthPassword());
 			session()->put('user', $user);
 			return $user;
 		} catch (\PDOException $ex) {
