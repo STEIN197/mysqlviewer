@@ -4,6 +4,7 @@ html,
 body{
 	height: 100vh;
 	font-size: 14px;
+	color: #333;
 }
 body{
 	display: flex;
@@ -35,6 +36,9 @@ main{
 }
 aside ul ul{
 	margin-left: 15px;
+}
+.table-props td:first-child{
+	white-space: nowrap;
 }
 
 // TODO: Add Arial font
