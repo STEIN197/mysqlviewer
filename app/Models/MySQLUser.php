@@ -12,6 +12,7 @@ class MySQLUser extends Model implements Authenticatable {
 	protected $password;
 	protected $database;
 	protected $rememberToken;
+	protected $accessibleDatabases;
 
 	public function __construct(string $name, ?string $password = null, ?string $database = null, ?string $host = 'localhost', $rememberToken = '') {
 		$this->name = $name;
@@ -47,6 +48,12 @@ class MySQLUser extends Model implements Authenticatable {
 
 	public function getDatabase(): ?string {
 		return $this->database;
+	}
+
+	public function getAccessibleDatabases(): array {
+		if (!$this->accessibleDatabases)
+			$this->accessibleDatabases = array_column(config('database.connections'), 'database');
+		return $this->accessibleDatabases;
 	}
 
 	public static function retrieveByCredentials(array $credentials): ?self {

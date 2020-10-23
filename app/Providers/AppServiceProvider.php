@@ -13,14 +13,13 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
-    {
+    public function register() {
         $this->app->singleton(Main::class, function($app) {
 			return new Main();
 		});
-		$this->app->bind(MySQLUser::class, function($app) {
-			return session()->get('user');
-		});
+		// $this->app->bind(MySQLUser::class, function($app) {
+		// 	return session()->get('user');
+		// });
     }
 
     /**

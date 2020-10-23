@@ -1,0 +1,1 @@
+body,html{min-height:100vh;font-size:14px}body{display:flex;flex-direction:column}main{flex-grow:1}.btn{transform-origin:center}.btn:active{transform:scale(.95)}.btn-sm{padding:.45rem .5rem}
