@@ -15,4 +15,7 @@
 			</li>
 		@endforeach
 	</ul>
+	<form action="">
+		<x-form-field type="select" name="locale" :placeholder="__('messages.lang')" :items="App\Locale::getAll()" :activeItem="App::getLocale()"/>
+	</form>
 </aside>

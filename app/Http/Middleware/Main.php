@@ -42,7 +42,7 @@ class Main {
 			'driver' => env('DB_CONNECTION', 'mysql'),
 			'host' => env('DB_HOST', 'localhost'),
 			'port' => env('DB_PORT', '3306'),
-			'database' => $user->getDatabase() ?? $user->getAccessibleDatabases()[0],
+			'database' => $user->getDatabase() ?? array_values($dbConfig)[0]['database'],
 			'username' => $user->getAuthIdentifier(),
 			'password' => $user->getAuthPassword(),
 			'charset' => 'utf8mb4',
