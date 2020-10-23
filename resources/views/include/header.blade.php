@@ -1,12 +1,7 @@
-<header>
-	<div class="container">
-		<ul class="nav nav-pills d-flex justify-content-start">
-			<li class="dropdown ml-auto">
-				<button class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@lang('route.profile')</button>
-				<div class="dropdown-menu">
-					<a class="dropdown-item" href="{{ route('logout') }}">@lang('route.logout')</a>
-				</div>
-			  </li>
-		</ul>
+<header class="d-flex align-items-center" style="height:40px;background-color:gray">
+	<div class="container-fluid">
+		<a href="/" class="fw-bold fs-20 nolink" style="color:white">
+			<i>mysqlviewer</i>
+		</a>
 	</div>
 </header>

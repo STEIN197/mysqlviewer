@@ -7,7 +7,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
 
 class MySQLUser extends Model implements Authenticatable {
 
-	protected $server;
+	protected $host;
 	protected $name;
 	protected $password;
 	protected $database;
@@ -56,6 +56,10 @@ class MySQLUser extends Model implements Authenticatable {
 		return $this->accessibleDatabases;
 	}
 
+	public function getHost(): string {
+		return $this->host;
+	}
+
 	public static function retrieveByCredentials(array $credentials): ?self {
 		try {
 			$connection = env('DB_CONNECTION', 'mysql');
@@ -63,7 +67,6 @@ class MySQLUser extends Model implements Authenticatable {
 			$port = env('DB_PORT', '3306');
 			$user = new self($credentials['username'], $credentials['password'], $credentials['database'], $credentials['host']);
 			$pdo = new \PDO("{$connection}:host={$host};port={$port}", $user->getAuthIdentifier(), $user->getAuthPassword());
-			session()->put('user', $user);
 			return $user;
 		} catch (\PDOException $ex) {
 			return null;

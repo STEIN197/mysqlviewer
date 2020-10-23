@@ -14,8 +14,8 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.6.0/split.min.js"></script>
 	<script src="{{mix('/js/app.min.js')}}" defer="true"></script>
 </head>
-<body>
-	<main>
-		@if (auth()->check())
-			@include('include.header')
-		@endif
+<body class="page-{{ auth()->check() ? 'admin' : 'index' }}">
+	@if (auth()->check())
+		@include('include.header')
+	@endif
+	<main class="d-flex flex-column crop">

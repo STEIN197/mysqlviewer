@@ -38,6 +38,7 @@ class MySQLGuard implements Guard {
 
 	public function login(array $credentials): bool {
 		$this->user = MySQLUser::retrieveByCredentials($credentials);
+		session()->put('user', $this->user);
 		return $this->user !== null;
 	}
 

@@ -3,7 +3,14 @@ function main(e) {
 		Api.Locale.change(this.value, function() {
 			location.reload();
 		});
-	})
+	});
+
+	$(".js-split-pane").each(function() {
+		Split($(this).children().toArray(), {
+			gutterSize: 6,
+			sizes: [].slice.call(this.children).map(e => +e.getAttribute("data-size"))
+		});
+	});
 }
 
 var Api = {
@@ -19,12 +26,17 @@ var Api = {
 	},
 	Locale: {
 		change: function(locale, callback) {
-			$.ajax(Api.makeUrl(), {
-				data: {
+			axios.get(Api.makeUrl(), {
+				params: {
 					locale: locale
-				},
-				complete: callback
-			});
+				}
+			}).then(callback);
+			// $.ajax(Api.makeUrl(), {
+			// 	data: {
+			// 		locale: locale
+			// 	},
+			// 	complete: callback
+			// });
 		}
 	}
 }
