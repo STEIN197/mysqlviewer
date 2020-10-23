@@ -1,3 +1,5 @@
+@import "colors";
+
 html,
 body{
 	height: 100vh;
@@ -34,12 +36,5 @@ main{
 aside ul ul{
 	margin-left: 15px;
 }
-aside a{
-	color: #333;
-	font-weight: 500;
-	text-decoration: none !important;
-}
-aside a:hover{
-	color: #ff7600;
-}
+
 // TODO: Add Arial font
