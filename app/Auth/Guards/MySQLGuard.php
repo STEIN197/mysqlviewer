@@ -6,6 +6,7 @@ use App\Models\MySQLUser;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
+use App\PDOWrapper;
 
 
 class MySQLGuard implements Guard {

@@ -5,15 +5,14 @@ namespace App\Http\Middleware;
 use Closure;
 use PDO;
 use Illuminate\Http\Request;
+use App\PDOWrapper;
 
 class Main {
-
-	private $pdo;
 
     public function handle(Request $request, Closure $next) {
 		if (session()->get('locale'))
 			app()->setLocale(session()->get('locale'));
-		if (session()->get('user')) {
+		if (session()->get('user') && resolve(PDOWrapper::class)->getPdo()) {
 			$this->setConnections();
 		}
         return $next($request);
@@ -25,8 +24,8 @@ class Main {
 		$protocol = env('DB_CONNECTION', 'mysql');
 		$host = env('DB_HOST', 'localhost');
 		$port = env('DB_PORT', '3306');
-		$this->pdo = new PDO("{$protocol}:host={$host};port={$port}", $user->getAuthIdentifier(), $user->getAuthPassword());
-		foreach ($this->pdo->query('SHOW DATABASES') as $row) {
+		$pdo = app()->make(PDOWrapper::class)->getPdo();
+		foreach ($pdo->query('SHOW DATABASES') as $row) {
 			$dbConfig["mysql:{$row['Database']}"] = [
 				'driver' => $protocol,
 				'host' => $host,

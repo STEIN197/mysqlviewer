@@ -4,6 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\View\Component;
+use App\PDOWrapper;
 
 class Sidebar extends Component
 {
@@ -38,34 +39,36 @@ class Sidebar extends Component
 				];
 			}
 		}
+		$overviewLinks = [
+			[
+				'link' => route('admin.vars'),
+				'name' => __('admin.variables'),
+				'active' => Route::currentRouteName() === 'admin.vars',
+			],
+			[
+				'link' => route('admin.engines'),
+				'name' => __('admin.engines'),
+				'active' => Route::currentRouteName() === 'admin.engines',
+			],
+			[
+				'link' => route('admin.encodings'),
+				'name' => __('admin.encodings'),
+				'active' => Route::currentRouteName() === 'admin.encodings',
+			],
+		];
+		if (auth()->user()->isRoot())
+			array_unshift($overviewLinks, [
+				'link' => route('admin.users'),
+				'name' => __('admin.users'),
+				'active' => Route::currentRouteName() === 'admin.users',
+			]);
 		return [
 			'links' => [
 				[
 					'link' => route('admin'),
 					'name' => __('admin.overview'),
 					'active' => strpos(Route::currentRouteName(), 'admin') === 0,
-					'items' => [
-						[
-							'link' => route('admin.users'),
-							'name' => __('admin.users'),
-							'active' => Route::currentRouteName() === 'admin.users',
-						],
-						[
-							'link' => route('admin.vars'),
-							'name' => __('admin.variables'),
-							'active' => Route::currentRouteName() === 'admin.vars',
-						],
-						[
-							'link' => route('admin.engines'),
-							'name' => __('admin.engines'),
-							'active' => Route::currentRouteName() === 'admin.engines',
-						],
-						[
-							'link' => route('admin.encodings'),
-							'name' => __('admin.encodings'),
-							'active' => Route::currentRouteName() === 'admin.encodings',
-						],
-					]
+					'items' => $overviewLinks
 				],
 				[
 					'link' => route('admin.schemas'),

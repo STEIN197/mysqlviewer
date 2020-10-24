@@ -37,6 +37,9 @@ main{
 aside ul ul{
 	margin-left: 15px;
 }
+aside li.active > a{
+	color: #ff7600;
+}
 .table-props td:first-child{
 	white-space: nowrap;
 }

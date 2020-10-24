@@ -23,12 +23,6 @@ class LoginController extends Controller {
 		]);
 	}
 
-	public function messages() {
-		return [
-			'host' => 'gg'
-		];
-	}
-
 	public function logout(Request $request) {
 		auth()->logout();
 		return redirect('/');
