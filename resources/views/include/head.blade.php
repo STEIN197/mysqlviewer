@@ -14,7 +14,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.6.0/split.min.js"></script>
 	<script src="{{mix('/js/app.min.js')}}" defer="true"></script>
 </head>
-<body class="page-{{ auth()->check() ? 'admin' : 'index' }}">
+<body class="page-{{ auth()->check() ? 'admin' : 'index' }}" style="opacity:0">
 	@if (auth()->check())
 		@include('include.header')
 	@endif

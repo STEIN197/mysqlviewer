@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\Page;
 
 class AdminController extends Controller {
@@ -15,17 +16,29 @@ class AdminController extends Controller {
 	public function users(Request $request) {
 		return $this->index($request);
 	}
-	// TODO
+
 	public function vars(Request $request) {
-		return $this->index($request);
+		return Page::new('vars')->withData([
+			'variables' => DB::select(DB::raw('SHOW VARIABLES'))
+		])->render();
 	}
-	// TODO
+
+
 	public function engines(Request $request) {
-		return $this->index($request);
+		return Page::new('engines')->withData([
+			'engines' => DB::select(DB::raw('SELECT * FROM `information_schema`.`ENGINES`'))
+		])->render();
 	}
+
 	// TODO
 	public function encodings(Request $request) {
-		return $this->index($request);
+		$encodings = DB::select(DB::raw('SELECT * FROM `information_schema`.`CHARACTER_SETS`'));
+		foreach ($encodings as &$encoding) {
+			$encoding->collations = DB::select(DB::raw("SELECT `COLLATION_NAME` FROM `information_schema`.`COLLATIONS` WHERE `CHARACTER_SET_NAME` = '{$encoding->CHARACTER_SET_NAME}'"));
+		}
+		return Page::new('encodings')->withData([
+			'encodings' => $encodings
+		])->render();
 	}
 	// TODO
 	public function schemas(Request $request) {

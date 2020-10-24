@@ -13,7 +13,26 @@
 				'version' => 'Version',
 				'user' => 'Logged user',
 				'charset' => 'Connection charset',
-				'collation' => 'Connection collation'
+				'collation' => 'Connection collation',
+				'vars' => [
+					'header' => 'MySQL variables',
+					'name' => 'Name',
+					'value' => 'Value',
+				],
+				'engines' => [
+					'header' => 'MySQL engines',
+					'name' => 'Name',
+					'support' => 'Support',
+					'desc' => 'Description',
+					'transactions' => 'Transactions support'
+				],
+				'encodings' => [
+					'header' => 'MySQL character sets',
+					'name' => 'Character set name',
+					'collations' => 'Collations',
+					'defaultCollation' => 'Default collation',
+					'maxlen' => 'Max length (in bytes)'
+				]
 			],
 			'apache' => [
 				'header' => 'Apache configuration',

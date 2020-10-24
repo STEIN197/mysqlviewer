@@ -11,6 +11,8 @@ function main(e) {
 			sizes: [].slice.call(this.children).map(e => +e.getAttribute("data-size"))
 		});
 	});
+
+	$("body").css("opacity", 1);
 }
 
 var Api = {

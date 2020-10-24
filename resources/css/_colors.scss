@@ -1,0 +1,13 @@
+@mixin font-color($keyword, $color, $color-for-links: false) {
+	.c-#{$keyword}{
+		color: $color;
+	}
+	@if $color-for-links {
+		a.c-#{$keyword}:hover{
+			color: $color-for-links;
+		}
+	}
+}
+
+@include font-color(white, white);
+@include font-color(default, #333, #ff7600);

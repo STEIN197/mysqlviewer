@@ -43,5 +43,8 @@ aside li.active > a{
 .table-props td:first-child{
 	white-space: nowrap;
 }
+table.table{
+	word-break: break-all;
+}
 
 // TODO: Add Arial font
