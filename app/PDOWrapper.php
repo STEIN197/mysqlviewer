@@ -16,4 +16,17 @@
 			}
 			return $this->pdo;
 		}
+
+		public static function toBool($value): ?bool {
+			if (is_string($value))
+				$value = strtolower($value);
+			$result = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+			if ($result === null) {
+				if (in_array($value, ['y']))
+					$result = true;
+				elseif (in_array($value, ['n']))
+					$result = false;
+			}
+			return $result;
+		}
 	}

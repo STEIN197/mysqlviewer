@@ -35,10 +35,17 @@ main{
 	justify-content: center;
 }
 aside ul ul{
-	margin-left: 15px;
+	margin-left: 1.25em;
 }
 aside li.active > a{
 	color: #ff7600;
+}
+aside .js-accordion-item.expanded > .fa-plus-square,
+aside .js-accordion-item.collapsed > .fa-minus-square{
+	display: none;
+}
+aside .js-accordion-item.expanded > .fa-minus-square{
+	display: inline-block;
 }
 .table-props td:first-child{
 	white-space: nowrap;

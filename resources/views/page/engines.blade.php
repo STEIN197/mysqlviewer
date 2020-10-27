@@ -17,9 +17,23 @@
 				@foreach ($engines as $row)
 					<tr>
 						<td>{{ $row->ENGINE }}</td>
-						<td>{{ $row->SUPPORT }}</td>
+						<td class="text-center">
+							@if (PDOWrapper::toBool($row->SUPPORT))
+								<i class="fas fa-check-circle c-green"></i>
+							@elseif (PDOWrapper::toBool($row->SUPPORT) !== null)
+								<i class="fas fa-times c-red"></i>
+							@else
+								{{ $row->SUPPORT }}
+							@endif
+						</td>
 						<td>{{ $row->COMMENT }}</td>
-						<td>{{ $row->TRANSACTIONS }}</td>
+						<td class="text-center">
+							@if (PDOWrapper::toBool($row->TRANSACTIONS))
+								<i class="fas fa-check-circle c-green"></i>
+							@else
+								<i class="fas fa-times c-red"></i>
+							@endif
+						</td>
 					</tr>
 				@endforeach
 			</tbody>

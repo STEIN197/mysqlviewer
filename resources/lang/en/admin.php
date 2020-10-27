@@ -43,7 +43,9 @@
 				'header' => 'PHP configuration',
 				'version' => 'Version',
 				'ext' => 'Loaded extensions',
-				// TODO: https://www.php.net/manual/ru/function.get-loaded-extensions.php
 			]
-		]
+			],
+			'tables' => 'Tables',
+			'functions' => 'Procedures and functions',
+			'views' => 'Views',
 	];

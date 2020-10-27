@@ -30,11 +30,10 @@ class AdminController extends Controller {
 		])->render();
 	}
 
-	// TODO
 	public function encodings(Request $request) {
-		$encodings = DB::select(DB::raw('SELECT * FROM `information_schema`.`CHARACTER_SETS`'));
+		$encodings = DB::select(DB::raw('SELECT * FROM `information_schema`.`CHARACTER_SETS` ORDER BY `CHARACTER_SET_NAME`'));
 		foreach ($encodings as &$encoding) {
-			$encoding->collations = DB::select(DB::raw("SELECT `COLLATION_NAME` FROM `information_schema`.`COLLATIONS` WHERE `CHARACTER_SET_NAME` = '{$encoding->CHARACTER_SET_NAME}'"));
+			$encoding->collations = DB::select(DB::raw("SELECT `COLLATION_NAME` FROM `information_schema`.`COLLATIONS` WHERE `CHARACTER_SET_NAME` = '{$encoding->CHARACTER_SET_NAME}' ORDER BY `COLLATION_NAME`"));
 		}
 		return Page::new('encodings')->withData([
 			'encodings' => $encodings
@@ -56,8 +55,8 @@ class AdminController extends Controller {
 	public function views(Request $request, $name) {
 		return $this->index($request);
 	}
-	// TODO
+
 	public function sql(Request $request) {
-		return $this->index($request);
+		return Page::new('sql')->render();
 	}
 }

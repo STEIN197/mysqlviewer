@@ -35,7 +35,8 @@ class Sidebar extends Component
 						'name' => $dbname
 					]),
 					'name' => $dbname,
-					'active' => Route::currentRouteName() === 'admin.schema'
+					'active' => Route::currentRouteName() === 'admin.schema',
+					'iconClass' => 'fas fa-database fa-fw'
 				];
 			}
 		}
@@ -44,16 +45,19 @@ class Sidebar extends Component
 				'link' => route('admin.vars'),
 				'name' => __('admin.variables'),
 				'active' => Route::currentRouteName() === 'admin.vars',
+				'iconClass' => 'fas fa-code fa-fw'
 			],
 			[
 				'link' => route('admin.engines'),
 				'name' => __('admin.engines'),
 				'active' => Route::currentRouteName() === 'admin.engines',
+				'iconClass' => 'fas fa-table fa-fw'
 			],
 			[
 				'link' => route('admin.encodings'),
 				'name' => __('admin.encodings'),
 				'active' => Route::currentRouteName() === 'admin.encodings',
+				'iconClass' => 'fas fa-spell-check fa-fw'
 			],
 		];
 		if (auth()->user()->isRoot())
@@ -61,6 +65,7 @@ class Sidebar extends Component
 				'link' => route('admin.users'),
 				'name' => __('admin.users'),
 				'active' => Route::currentRouteName() === 'admin.users',
+				'iconClass' => 'fas fa-users fa-fw'
 			]);
 		return [
 			'links' => [
@@ -68,23 +73,28 @@ class Sidebar extends Component
 					'link' => route('admin'),
 					'name' => __('admin.overview'),
 					'active' => strpos(Route::currentRouteName(), 'admin') === 0,
+					'iconClass' => 'fas fa-list fa-fw',
 					'items' => $overviewLinks
 				],
 				[
 					'link' => route('admin.schemas'),
 					'name' => __('admin.schemas'),
 					'active' => Route::currentRouteName() === 'admin.schemas',
-					'items' => $schemasLinks
+					'iconClass' => 'fas fa-database fa-fw',
+					'expands' => true,
+					'items' => $schemasLinks,
 				],
 				[
 					'link' => route('admin.sql'),
 					'name' => __('admin.sql'),
 					'active' => Route::currentRouteName() === 'admin.sql',
+					'iconClass' => 'fas fa-terminal fa-fw'
 				],
 				[
 					'link' => route('logout'),
 					'name' => __('route.logout'),
 					'active' => Route::currentRouteName() === 'route.logout',
+					'iconClass' => 'fas fa-sign-out-alt fa-fw'
 				]
 			],
 		];
