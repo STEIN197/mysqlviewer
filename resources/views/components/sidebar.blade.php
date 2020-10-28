@@ -19,27 +19,35 @@
 									<span>{{ $child['name'] }}</span>
 								</a>
 								@if (@$link['expands'])
-									<ul class="js-accordion-body list-unstyled" style="display:none">
-										<li>
+									<ul class="js-accordion-body list-unstyled js-accordion">
+										<li class="js-accordion-item collapsed">
 											<a href="javascript:void(0)" class="fas fa-fw fa-plus-square cp c-default js-accordion-button"></a>
+											<a href="javascript:void(0)" class="fas fa-fw fa-minus-square cp c-default js-accordion-button"></a>
 											<a href="" class="c-default fw-medium nolink">
 												<i class="fas fa-table fa-fw"></i>
 												<span>@lang('admin.tables')</span>
 											</a>
+											<ul class="list-unstyled js-accordion-body">
+												<li class="text-center"><i class="fas fa-spinner fa-pulse"></i></li>
+											</ul>
 										</li>
-										<li>
+										<li class="js-accordion-item collapsed">
 											<a href="javascript:void(0)" class="fas fa-fw fa-plus-square cp c-default js-accordion-button"></a>
+											<a href="javascript:void(0)" class="fas fa-fw fa-minus-square cp c-default js-accordion-button"></a>
 											<a href="" class="c-default fw-medium nolink">
 												<i class="fas fa-table fa-fw"></i>
 												<span>@lang('admin.views')</span>
 											</a>
+											<ul class="list-unstyled js-accordion-body"></ul>
 										</li>
-										<li>
+										<li class="js-accordion-item collapsed">
 											<a href="javascript:void(0)" class="fas fa-fw fa-plus-square cp c-default js-accordion-button"></a>
+											<a href="javascript:void(0)" class="fas fa-fw fa-minus-square cp c-default js-accordion-button"></a>
 											<a href="" class="c-default fw-medium nolink">
 												<i class="fas fa-square-root-alt fa-fw"></i>
 												<span>@lang('admin.functions')</span>
 											</a>
+											<ul class="list-unstyled js-accordion-body"></ul>
 										</li>
 									</ul>
 								@endif
