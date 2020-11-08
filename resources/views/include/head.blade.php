@@ -16,9 +16,7 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.min.js" integrity="sha512-GoORoNnxst42zE3rYPj4bNBm0Q6ZRXKNH2D9nEmNvVF/z24ywVnijAWVi/09iBiVDQVf3UlZHpzhAJIdd9BXqw==" crossorigin="anonymous"></script>
 	@endif
 	<script src="https://kit.fontawesome.com/836bea6ca8.js" crossorigin="anonymous"></script>
-	@if (auth()->user())
-		<script src="/js/accordion.min.js"></script>
-	@endif
+	<script src="/js/accordion.min.js"></script>
 	<script src="{{mix('/js/app.min.js')}}" defer="true"></script>
 </head>
 <body class="page-{{ auth()->check() ? 'admin' : 'index' }}" style="opacity:0">

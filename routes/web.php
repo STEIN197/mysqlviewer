@@ -11,7 +11,7 @@ use App\Http\Middleware\Main;
 Route::middleware(Main::class)->group(function() {
 	Route::prefix('api')->group(function() {
 		Route::get('/', [ApiController::class, 'index']);
-		Route::get('db', function(Request $request) {
+		Route::get('/database/{name}/', function(Request $request) {
 			return 1;
 		});
 	});

@@ -1,4 +1,4 @@
-<aside>
+<aside class="nowrap">
 	<ul class="list-unstyled">
 		@foreach ($links as $link)
 			<li class="{{ $link['active'] ? 'active' : '' }}">
@@ -28,7 +28,14 @@
 												<span>@lang('admin.tables')</span>
 											</a>
 											<ul class="list-unstyled js-accordion-body">
-												<li class="text-center"><i class="fas fa-spinner fa-pulse"></i></li>
+												@foreach (DB::connection("mysql:{$child['name']}")->select('SHOW TABLES') as $row)
+													<li>
+														<a href="javascript:void(0)" class="c-default fw-medium nolink">
+															<i class="fas fa-table fa-fw"></i>
+															<span>{{ $row->{"Tables_in_{$child['name']}"} }}</span>
+														</a>
+													</li>
+												@endforeach
 											</ul>
 										</li>
 										<li class="js-accordion-item collapsed">

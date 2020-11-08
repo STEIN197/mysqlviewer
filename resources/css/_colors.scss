@@ -1,3 +1,4 @@
+$color-orange: #ff7600;
 @mixin font-color($keyword, $color, $color-for-links: false) {
 	.c-#{$keyword}{
 		color: $color;
@@ -9,7 +10,7 @@
 	}
 }
 
-@include font-color(white, white);
-@include font-color(default, #333, #ff7600);
+@include font-color(white, white, $color-orange);
+@include font-color(default, #333, $color-orange);
 @include font-color(red, red);
 @include font-color(green, green);
