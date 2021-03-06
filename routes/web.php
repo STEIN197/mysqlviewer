@@ -24,6 +24,8 @@ Route::middleware(Main::class)->group(function() {
 			Route::get('/', [AdminController::class, 'index'])->name('admin');
 			Route::name('admin.')->group(function() {
 				Route::get('/users/', [AdminController::class, 'users'])->name('users');
+				Route::get('/user/{name}/', [AdminController::class, 'user'])->name('user');
+				Route::post('/user/{name}/', [AdminController::class, 'updateUser'])->name('updateUser');
 				Route::get('/vars/', [AdminController::class, 'vars'])->name('vars');
 				Route::get('/engines/', [AdminController::class, 'engines'])->name('engines');
 				Route::get('/encodings/', [AdminController::class, 'encodings'])->name('encodings');

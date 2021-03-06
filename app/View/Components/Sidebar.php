@@ -63,7 +63,7 @@ class Sidebar extends Component
 		if (auth()->user()->isRoot())
 			array_unshift($overviewLinks, [
 				'link' => route('admin.users'),
-				'name' => __('admin.users'),
+				'name' => __('admin.users.header'),
 				'active' => Route::currentRouteName() === 'admin.users',
 				'iconClass' => 'fas fa-users fa-fw'
 			]);
@@ -81,7 +81,6 @@ class Sidebar extends Component
 					'name' => __('admin.schemas'),
 					'active' => Route::currentRouteName() === 'admin.schemas',
 					'iconClass' => 'fas fa-database fa-fw',
-					'expands' => true,
 					'items' => $schemasLinks,
 				],
 				[

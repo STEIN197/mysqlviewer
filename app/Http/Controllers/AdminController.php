@@ -12,9 +12,25 @@ class AdminController extends Controller {
 		return Page::new('admin')->render();
 	}
 
-	// TODO
 	public function users(Request $request) {
-		return $this->index($request);
+		return Page::new('users')->withData([
+			'variables' => DB::select(DB::raw('SELECT * FROM mysql.user'))
+		])->render();
+	}
+
+	public function user(Request $request, string $name) {
+		$user = new UserController(...explode('@', $name));
+		return Page::new('user')->withData([
+			'name' => $name,
+			'login' => $user->getLogin(),
+			'limits' => $user->getLimits(),
+			'privileges' => $user->getPrivileges()
+		])->render();
+	}
+
+	public function updateUser(Request $request, string $name) {
+		$user = new UserController(...explode('@', $name));
+		return $user->update($request->all());
 	}
 
 	public function vars(Request $request) {
@@ -22,7 +38,6 @@ class AdminController extends Controller {
 			'variables' => DB::select(DB::raw('SHOW VARIABLES'))
 		])->render();
 	}
-
 
 	public function engines(Request $request) {
 		return Page::new('engines')->withData([
