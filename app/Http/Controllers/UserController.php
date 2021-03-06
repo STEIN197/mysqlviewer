@@ -149,4 +149,14 @@ class UserController extends Controller {
 	private static function escape(string $string): string {
 		return DB::connection()->getPdo()->quote($string);
 	}
+
+	public static function new(array $data) {
+		DB::statement('CREATE USER '.self::escape($data['User']).'@'.self::escape($data['Host']).' IDENTIFIED BY '.self::escape($data['Password']));
+		return redirect()->route('admin.users');
+	}
+
+	public static function delete(string $id) {
+		DB::statement('DROP USER '.join('@', array_map('self::escape', explode('@', $id))));
+		return back();
+	}
 }

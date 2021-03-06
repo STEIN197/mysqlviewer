@@ -35,7 +35,7 @@ class Sidebar extends Component
 						'name' => $dbname
 					]),
 					'name' => $dbname,
-					'active' => Route::currentRouteName() === 'admin.schema',
+					'active' => Route::currentRouteName() === 'admin.schema' && request()->name === $dbname,
 					'iconClass' => 'fas fa-database fa-fw'
 				];
 			}

@@ -33,6 +33,32 @@ class AdminController extends Controller {
 		return $user->update($request->all());
 	}
 
+	public function newEntity(Request $request, string $type) {
+		return Page::new("new_{$type}")->withData([
+			'columns' => [
+				'Host', 'User', 'Password'
+			]
+		])->render();
+	}
+
+	public function createEntity(Request $request, string $type) {
+		switch ($type) {
+			case 'user':
+				return UserController::new($request->all());
+			default:
+				return "No template for type $type";
+		}
+	}
+
+	public function deleteEntity(Request $request, string $type, string $id) {
+		switch ($type) {
+			case 'user':
+				return UserController::delete($id);
+			default:
+				return "No template for type $type";
+		}
+	}
+
 	public function vars(Request $request) {
 		return Page::new('vars')->withData([
 			'variables' => DB::select(DB::raw('SHOW VARIABLES'))

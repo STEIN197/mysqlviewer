@@ -10,6 +10,7 @@
 					<th>@lang('admin.users.name')</th>
 					<th>@lang('admin.users.host')</th>
 					<th>@lang('admin.users.edit')</th>
+					<th>@lang('admin.users.delete')</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -20,9 +21,13 @@
 						<td>
 							<a href={{ route('admin.user', ['name' => "{$row->User}@{$row->Host}"]) }}>@lang('admin.users.edit')</a>
 						</td>
+						<td>
+							<a href="{{ route('admin.deleteEntity', ['type' => 'user', 'id' => "{$row->User}@{$row->Host}"]) }}">@lang('admin.users.delete')</a>
+						</td>
 					</tr>
 				@endforeach
 			</tbody>
 		</table>
+		<a href="{{ route('admin.newEntity', ['type' => 'user']) }}" class="btn btn-primary btn-sm">@lang('admin.add')</a>
 	</section>
 </div>

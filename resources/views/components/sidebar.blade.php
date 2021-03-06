@@ -10,10 +10,6 @@
 					<ul class="list-unstyled{{ @$link['expands'] ? ' js-accordion' : '' }}">
 						@foreach ($link['items'] as $child)
 							<li class="{{ @$link['expands'] ? 'js-accordion-item collapsed' : '' }} {{ $child['active'] ? 'active' : '' }}">
-								@if (@$link['expands'])
-									<a href="javascript:void(0)" class="fas fa-fw fa-plus-square cp c-default js-accordion-button"></a>
-									<a href="javascript:void(0)" class="fas fa-fw fa-minus-square cp c-default js-accordion-button"></a>
-								@endif
 								<a href="{{ $child['link'] }}" class="c-default fw-medium nolink">
 									<i class="{{ @$child['iconClass'] }}"></i>
 									<span>{{ $child['name'] }}</span>
