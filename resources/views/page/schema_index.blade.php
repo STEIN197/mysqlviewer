@@ -10,6 +10,7 @@
 					<th>@lang('admin.schemas.name')</th>
 					<th>@lang('admin.schemas.charset')</th>
 					<th>@lang('admin.schemas.collation')</th>
+					<th>@lang('admin.edit')</th>
 					<th>@lang('admin.delete')</th>
 				</tr>
 			</thead>
@@ -20,7 +21,10 @@
 						<td>{{ $row->DEFAULT_CHARACTER_SET_NAME }}</td>
 						<td>{{ $row->DEFAULT_COLLATION_NAME }}</td>
 						<td>
-							<a href="{{ route('admin.delete.schema', ['name' => $row->SCHEMA_NAME]) }}">@lang('admin.delete')</a>
+							<a href="{{ route('admin.schema.read', ['id' => $row->SCHEMA_NAME]) }}">@lang('admin.edit')</a>
+						</td>
+						<td>
+							<a href="{{ route('admin.delete.schema', ['id' => $row->SCHEMA_NAME]) }}">@lang('admin.delete')</a>
 						</td>
 					</tr>
 				@endforeach

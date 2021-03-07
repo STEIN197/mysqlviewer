@@ -12,6 +12,10 @@ abstract class Entity {
 		$this->data = $data;
 	}
 
+	public function getData(): array {
+		return $this->data;
+	}
+
 	public function __get(string $property) {
 		if (isset($this->data[$property]))
 			return $this->data[$property];

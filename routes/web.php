@@ -28,6 +28,11 @@ Route::middleware(Main::class)->group(function() {
 			Route::get('/', [AdminController::class, 'index'])->name('admin');
 			Route::name('admin.')->group(function () {
 
+				Route::get('/vars/', [AdminController::class, 'vars'])->name('vars');
+				Route::get('/engines/', [AdminController::class, 'engines'])->name('engines');
+				Route::get('/encodings/', [AdminController::class, 'encodings'])->name('encodings');
+				Route::get('/sql/', [AdminController::class, 'sql'])->name('sql');
+
 				Route::prefix('user')->group(function () {
 					Route::get('/', [UserController::class, 'index'])->name('user.index');
 					Route::get('/{id}/', [UserController::class, 'read'])->name('user.read');
@@ -41,18 +46,13 @@ Route::middleware(Main::class)->group(function() {
 					// Route::get('/{id}/table/', [SchemaController::class, 'tables'])->name('schema.table');
 				});
 
-				Route::get('/vars/', [AdminController::class, 'vars'])->name('vars');
-				Route::get('/engines/', [AdminController::class, 'engines'])->name('engines');
-				Route::get('/encodings/', [AdminController::class, 'encodings'])->name('encodings');
-				Route::get('/sql/', [AdminController::class, 'sql'])->name('sql');
-
 				Route::prefix('new')->group(function () {
 					Route::name('new.')->group(function() {
 						Route::get('/user/', [UserController::class, 'new'])->name('user');
 						Route::post('/user/', [UserController::class, 'create']);
 
 						Route::get('/schema/', [SchemaController::class, 'new'])->name('schema');
-						Route::post('/schema/{id}', [SchemaController::class, 'create']);
+						Route::post('/schema/', [SchemaController::class, 'create']);
 					});
 				});
 			

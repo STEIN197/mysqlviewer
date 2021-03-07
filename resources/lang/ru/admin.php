@@ -4,12 +4,22 @@
 		'variables' => 'Переменные',
 		'engines' => 'Типы таблиц',
 		'encodings' => 'Кодировки',
+		'schema' => [
+			'new' => 'Новая база',
+			'columns' => [
+				'SCHEMA_NAME' => 'Имя',
+				'DEFAULT_CHARACTER_SET_NAME' => 'Кодировка',
+				'DEFAULT_COLLATION_NAME' => 'Сравнение'
+			]
+		],
 		'schemas' => [
 			'header' => 'Базы данных',
 			'tables' => 'Таблицы'
 		],
 		'add' => 'Добавить',
 		'delete' => 'Удалить',
+		'edit' => 'Редактировать',
+		'submit' => 'Применить',
 		'server' => [
 			'mysql' => [
 				'header' => 'Конфигурация MySQL',
