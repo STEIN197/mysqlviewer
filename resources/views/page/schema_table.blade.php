@@ -3,6 +3,9 @@
 		<x-sidebar/>
 	</section>
 	<section id="content" class="split-pane" data-size="80">
+		@php
+			DB::connection('mysql:Bitrix')->select("SELECT * FROM b_user");
+		@endphp
 		<p class="fs-20 fw-bold">{{ $schema['SCHEMA_NAME'] }}</p>
 		<table class="table table-sm table-bordered table-light table-props">
 			<thead class="thead-dark">
@@ -11,7 +14,7 @@
 					<th>@lang('admin.table.data')</th>
 					<th>@lang('admin.table.structure')</th>
 					<th>@lang('admin.table.add')</th>
-					<th>@lang('admin.table.clear')</th>
+					<th>@lang('admin.table.truncate')</th>
 					<th>@lang('admin.table.delete')</th>
 					<th>@lang('admin.table.rows')</th>
 					<th>@lang('admin.table.type')</th>
@@ -33,10 +36,10 @@
 							<a href="">@lang('admin.table.add')</a>
 						</td>
 						<td>
-							<a href="">@lang('admin.table.clear')</a>
+							<a href="{{ route('admin.table.truncate', ['id' => $row->TABLE_SCHEMA, 'name' => $row->TABLE_NAME]) }}">@lang('admin.table.truncate')</a>
 						</td>
 						<td>
-							<a href="">@lang('admin.table.delete')</a>
+							<a href="{{ route('admin.delete.table', ['id' => $row->TABLE_NAME, 'schema' => $row->TABLE_SCHEMA]) }}">@lang('admin.table.delete')</a>
 						</td>
 						<td>{{ $row->TABLE_ROWS }}</td>
 						<td>{{ $row->ENGINE }}</td>

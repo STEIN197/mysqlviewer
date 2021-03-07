@@ -47,6 +47,7 @@ Route::middleware(Main::class)->group(function() {
 
 					Route::prefix('/{id}/table/')->group(function () {
 						Route::get('/', [SchemaController::class, 'table'])->name('schema.table');
+						Route::get('/{name}/truncate/', [TableController::class, 'truncate'])->name('table.truncate');
 					});
 				});
 
@@ -67,6 +68,7 @@ Route::middleware(Main::class)->group(function() {
 					Route::name('delete.')->group(function() {
 						Route::get('/schema/{id}', [SchemaController::class, 'delete'])->name('schema');
 						Route::get('/user/{id}', [UserController::class, 'delete'])->name('user');
+						Route::get('/table/{id}/schema/{schema}', [TableController::class, 'delete'])->name('table');
 					});
 				});
 			});

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Page;
 use App\Models\Schema;
+use App\Http\Middleware\Main;
 
 class SchemaController extends Controller {
 
@@ -27,6 +28,7 @@ class SchemaController extends Controller {
 
 	public function create(Request $request) {
 		Schema::create($request->all());
+		app()->make(Main::class)->setConnections();
 		return redirect()->route('admin.schema.index');
 	}
 
@@ -52,11 +54,13 @@ class SchemaController extends Controller {
 		if (!$schema)
 			return abort(404);
 		$schema->update($request->all());
+		app()->make(Main::class)->setConnections();
 		return redirect()->action([self::class, 'read'], ['id' => (string) $schema]);
 	}
 
 	public static function delete(Request $request, string $id) {
 		Schema::read(['SCHEMA_NAME' => $id])->delete();
+		app()->make(Main::class)->setConnections();
 		return back();
 	}
 
