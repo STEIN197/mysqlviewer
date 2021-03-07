@@ -11,7 +11,11 @@ class Table extends Entity {
 		$this->connection()->statement("DROP TABLE IF EXISTS `{$this->TABLE_NAME}`");
 	}
 
-	public function update(array $data): void {} // TODO
+	public function update(array $data): void {
+		if ($data['TABLE_NAME'] !== $this->TABLE_NAME)
+			$this->rename($data['TABLE_NAME']);
+		$this->data = array_merge($this->data, $data);
+	} // TODO
 
 	public function truncate(): void {
 		$this->connection()->statement("TRUNCATE TABLE `{$this->TABLE_NAME}`");
@@ -49,6 +53,10 @@ class Table extends Entity {
 	private function connection(): Connection {
 		$dbName = strtolower($this->TABLE_SCHEMA);
 		return DB::connection("mysql:{$dbName}");
+	}
+
+	private function rename(string $name): void {
+		$this->connection()->statement("RENAME TABLE `{$this->TABLE_NAME}` TO `{$name}`");
 	}
 
 	public static function create(array $data): ?Table {} // TODO

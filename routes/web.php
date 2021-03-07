@@ -8,6 +8,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SchemaController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\RowController;
+use App\Http\Controllers\ColumnController;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\Main;
 
@@ -47,6 +49,8 @@ Route::middleware(Main::class)->group(function() {
 
 					Route::prefix('/{id}/table/')->group(function () {
 						Route::get('/', [SchemaController::class, 'table'])->name('schema.table');
+						Route::get('/{name}/', [TableController::class, 'read'])->name('table.read');
+						Route::post('/{name}/', [TableController::class, 'update'])->name('table.update');
 						Route::get('/{name}/truncate/', [TableController::class, 'truncate'])->name('table.truncate');
 						Route::get('/{name}/rows/', [TableController::class, 'rows'])->name('table.rows');
 					});
@@ -60,16 +64,24 @@ Route::middleware(Main::class)->group(function() {
 						Route::get('/schema/', [SchemaController::class, 'new'])->name('schema');
 						Route::post('/schema/', [SchemaController::class, 'create']);
 
-						Route::get('/table/', [TableController::class, 'new'])->name('table');
-						Route::post('/table/', [TableController::class, 'create']);
+						Route::get('/table/', [TableController::class, 'new'])->name('table'); // TODO
+						Route::post('/table/', [TableController::class, 'create']); // TODO
+
+						Route::get('/row/', [RowController::class, 'new'])->name('row'); // TODO
+						Route::post('/row/', [RowController::class, 'create']); // TODO
+
+						Route::get('/column/', [ColumnController::class, 'new'])->name('column'); // TODO
+						Route::post('/column/', [ColumnController::class, 'create']); // TODO
 					});
 				});
 			
 				Route::prefix('delete')->group(function () {
 					Route::name('delete.')->group(function() {
-						Route::get('/schema/{id}', [SchemaController::class, 'delete'])->name('schema');
-						Route::get('/user/{id}', [UserController::class, 'delete'])->name('user');
-						Route::get('/table/{schema}/{id}', [TableController::class, 'delete'])->name('table');
+						Route::get('/schema/{id}/', [SchemaController::class, 'delete'])->name('schema');
+						Route::get('/user/{id}/', [UserController::class, 'delete'])->name('user');
+						Route::get('/table/{schema}/{id}/', [TableController::class, 'delete'])->name('table');
+						Route::get('/row/{schema}/{table}/{id}/', [RowController::class, 'delete'])->name('row'); // TODO
+						Route::get('/column/{schema}/{table}/{id}/', [ColumnController::class, 'delete'])->name('column'); // TODO
 					});
 				});
 			});

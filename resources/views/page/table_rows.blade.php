@@ -4,7 +4,7 @@
 	</section>
 	<section id="content" class="split-pane" data-size="80">
 		<p class="fs-20 fw-bold">{{ $table }}</p>
-		<table class="table table-sm table-bordered table-light table-props">
+		<table class="table table-sm table-bordered table-light table-props" style="white-space:nowrap">
 			<thead class="thead-dark">
 				<tr>
 					@if ($primary)
@@ -24,7 +24,7 @@
 							</td>
 						@endif
 						@foreach ($columns as $col => $value)
-							<th>{{ $row->{$col} }}</th>
+							<td>{{ $row->{$col} }}</td>
 						@endforeach
 					</tr>
 				@endforeach

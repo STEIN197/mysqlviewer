@@ -8,11 +8,7 @@
 			<thead class="thead-dark">
 				<tr>
 					<th>@lang('admin.table.name')</th>
-					<th>@lang('admin.table.data')</th>
-					<th>@lang('admin.table.structure')</th>
-					<th>@lang('admin.table.add')</th>
-					<th>@lang('admin.table.truncate')</th>
-					<th>@lang('admin.table.delete')</th>
+					<th>@lang('admin.actions')</th>
 					<th>@lang('admin.table.rows')</th>
 					<th>@lang('admin.table.type')</th>
 					<th>@lang('admin.table.collation')</th>
@@ -24,18 +20,14 @@
 					<tr>
 						<td>{{ $row->TABLE_NAME }}</td>
 						<td>
+							<a href="{{ route('admin.table.read', ['id' => $schema['SCHEMA_NAME'], 'name' => $row->TABLE_NAME]) }}">@lang('admin.edit')</a>
+							|
 							<a href="{{ route('admin.table.rows', ['id' => $schema['SCHEMA_NAME'], 'name' => $row->TABLE_NAME]) }}">@lang('admin.table.data')</a>
-						</td>
-						<td>
-							<a href="">@lang('admin.table.structure')</a>
-						</td>
-						<td>
-							<a href="">@lang('admin.table.add')</a>
-						</td>
-						<td>
+							|
+							<a href="{{ route('admin.new.row', ['table' => $row->TABLE_NAME, 'schema' => $row->TABLE_SCHEMA]) }}">@lang('admin.table.add')</a>
+							|
 							<a href="{{ route('admin.table.truncate', ['id' => $row->TABLE_SCHEMA, 'name' => $row->TABLE_NAME]) }}">@lang('admin.table.truncate')</a>
-						</td>
-						<td>
+							|
 							<a href="{{ route('admin.delete.table', ['id' => $row->TABLE_NAME, 'schema' => $row->TABLE_SCHEMA]) }}">@lang('admin.table.delete')</a>
 						</td>
 						<td>{{ $row->TABLE_ROWS }}</td>
