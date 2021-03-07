@@ -26,15 +26,19 @@ class Main {
 		$port = env('DB_PORT', '3306');
 		$pdo = app()->make(PDOWrapper::class)->getPdo();
 		foreach ($pdo->query('SHOW DATABASES') as $row) {
-			$dbConfig["mysql:{$row['Database']}"] = [
+			$dbName = strtolower($row['Database']);
+			$dbConfig["mysql:{$dbName}"] = [
 				'driver' => $protocol,
 				'host' => $host,
 				'port' => $port,
-				'database' => $row['Database'],
+				'database' => $dbName,
 				'username' => $user->getAuthIdentifier(),
 				'password' => $user->getAuthPassword(),
 				'charset' => 'utf8mb4',
 				'collation' => 'utf8mb4_unicode_ci',
+				'options' => [
+					PDO::ATTR_EMULATE_PREPARES => true,
+				],
 			];
 		}
 		$dbConfig['mysql'] = [
@@ -46,6 +50,9 @@ class Main {
 			'password' => $user->getAuthPassword(),
 			'charset' => 'utf8mb4',
 			'collation' => 'utf8mb4_unicode_ci',
+			'options' => [
+					PDO::ATTR_EMULATE_PREPARES => true,
+				],
 		];
 		config(['database.connections' => $dbConfig]);
 	}

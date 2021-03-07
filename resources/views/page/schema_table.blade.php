@@ -3,9 +3,6 @@
 		<x-sidebar/>
 	</section>
 	<section id="content" class="split-pane" data-size="80">
-		@php
-			DB::connection('mysql:Bitrix')->select("SELECT * FROM b_user");
-		@endphp
 		<p class="fs-20 fw-bold">{{ $schema['SCHEMA_NAME'] }}</p>
 		<table class="table table-sm table-bordered table-light table-props">
 			<thead class="thead-dark">
@@ -27,7 +24,7 @@
 					<tr>
 						<td>{{ $row->TABLE_NAME }}</td>
 						<td>
-							<a href="">@lang('admin.table.data')</a>
+							<a href="{{ route('admin.table.rows', ['id' => $schema['SCHEMA_NAME'], 'name' => $row->TABLE_NAME]) }}">@lang('admin.table.data')</a>
 						</td>
 						<td>
 							<a href="">@lang('admin.table.structure')</a>

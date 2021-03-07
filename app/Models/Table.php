@@ -17,12 +17,38 @@ class Table extends Entity {
 		$this->connection()->statement("TRUNCATE TABLE `{$this->TABLE_NAME}`");
 	}
 
+	public function rows(): array {
+		return $this->connection()->select("SELECT * FROM `{$this->TABLE_NAME}`");
+	}
+
+	public function columns(): array {
+		$result = DB::select("SELECT * FROM `information_schema`.`COLUMNS` WHERE TABLE_NAME = '{$this->TABLE_NAME}' AND TABLE_SCHEMA = '{$this->TABLE_SCHEMA}' ORDER BY ORDINAL_POSITION");
+		return array_combine(
+			array_column(
+				array_map(
+					function ($v) {
+						return (array) $v;
+					},
+					$result
+				),
+				'COLUMN_NAME'
+			),
+			$result
+		);
+	}
+
+	public function hasPrimaryKey(): bool {
+		$result = DB::select("SELECT * FROM `information_schema`.`TABLE_CONSTRAINTS` WHERE TABLE_NAME = '{$this->TABLE_NAME}' AND TABLE_SCHEMA = '{$this->TABLE_SCHEMA}' AND CONSTRAINT_TYPE = 'PRIMARY KEY'");
+		return sizeof($result) > 0;
+	}
+
 	public function __toString(): string {
 		return $this->TABLE_NAME;
 	}
 
 	private function connection(): Connection {
-		return DB::connection("mysql:{$this->TABLE_SCHEMA}");
+		$dbName = strtolower($this->TABLE_SCHEMA);
+		return DB::connection("mysql:{$dbName}");
 	}
 
 	public static function create(array $data): ?Table {} // TODO

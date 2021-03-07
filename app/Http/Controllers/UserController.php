@@ -11,7 +11,7 @@ class UserController extends Controller {
 
 	public function index(Request $request) {
 		return Page::new('user_index')->withData([
-			'variables' => DB::select(DB::raw('SELECT * FROM mysql.user'))
+			'variables' => DB::select('SELECT * FROM mysql.user')
 		])->render();
 	}
 
