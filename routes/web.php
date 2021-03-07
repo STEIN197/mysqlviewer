@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SchemaController;
+use App\Http\Controllers\TableController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\Main;
@@ -43,7 +44,10 @@ Route::middleware(Main::class)->group(function() {
 					Route::get('/', [SchemaController::class, 'index'])->name('schema.index');
 					Route::get('/{id}/', [SchemaController::class, 'read'])->name('schema.read');
 					Route::post('/{id}/', [SchemaController::class, 'update'])->name('schema.update');
-					// Route::get('/{id}/table/', [SchemaController::class, 'tables'])->name('schema.table');
+
+					Route::prefix('/{id}/table/')->group(function () {
+						Route::get('/', [SchemaController::class, 'table'])->name('schema.table');
+					});
 				});
 
 				Route::prefix('new')->group(function () {
@@ -53,6 +57,9 @@ Route::middleware(Main::class)->group(function() {
 
 						Route::get('/schema/', [SchemaController::class, 'new'])->name('schema');
 						Route::post('/schema/', [SchemaController::class, 'create']);
+
+						Route::get('/table/', [TableController::class, 'new'])->name('table');
+						Route::post('/table/', [TableController::class, 'create']);
 					});
 				});
 			

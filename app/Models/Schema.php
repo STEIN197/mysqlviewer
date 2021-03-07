@@ -14,6 +14,10 @@ class Schema extends Entity {
 		DB::statement("ALTER SCHEMA `{$this->SCHEMA_NAME}` CHARACTER SET = `{$data['DEFAULT_CHARACTER_SET_NAME']}` COLLATE = `{$data['DEFAULT_COLLATION_NAME']}`");
 	}
 
+	public function tables(): array {
+		return DB::select("SELECT * FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = '{$this->SCHEMA_NAME}'");
+	}
+
 	public function __toString(): string {
 		return $this->SCHEMA_NAME;
 	}

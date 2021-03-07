@@ -55,8 +55,16 @@ class SchemaController extends Controller {
 		return redirect()->action([self::class, 'read'], ['id' => (string) $schema]);
 	}
 
-	public static function delete(string $id) {
+	public static function delete(Request $request, string $id) {
 		Schema::read(['SCHEMA_NAME' => $id])->delete();
 		return back();
+	}
+
+	public static function table(Request $request, string $id) {
+		$schema = Schema::read(['SCHEMA_NAME' => $id]);
+		return Page::new('schema_table')->withData([
+			'schema' => $schema->getData(),
+			'tables' => $schema->tables()
+		])->render();
 	}
 }

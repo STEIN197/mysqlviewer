@@ -31,7 +31,7 @@ class Sidebar extends Component
 		if ($user = session()->get('user')) {
 			foreach ($user->getAccessibleDatabases() as $dbname) {
 				$schemasLinks[] = [
-					'link' => route('admin.schema.read', [
+					'link' => route('admin.schema.table', [
 						'id' => $dbname
 					]),
 					'name' => $dbname,
