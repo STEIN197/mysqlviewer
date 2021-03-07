@@ -31,11 +31,11 @@ class Sidebar extends Component
 		if ($user = session()->get('user')) {
 			foreach ($user->getAccessibleDatabases() as $dbname) {
 				$schemasLinks[] = [
-					'link' => route('admin.schema', [
+					'link' => route('admin.schema.read', [
 						'name' => $dbname
 					]),
 					'name' => $dbname,
-					'active' => Route::currentRouteName() === 'admin.schema' && request()->name === $dbname,
+					'active' => Route::currentRouteName() === 'admin.schema.read' && request()->name === $dbname,
 					'iconClass' => 'fas fa-database fa-fw'
 				];
 			}
@@ -62,7 +62,7 @@ class Sidebar extends Component
 		];
 		if (auth()->user()->isRoot())
 			array_unshift($overviewLinks, [
-				'link' => route('admin.users'),
+				'link' => route('admin.user.index'),
 				'name' => __('admin.users.header'),
 				'active' => Route::currentRouteName() === 'admin.users',
 				'iconClass' => 'fas fa-users fa-fw'
@@ -77,8 +77,8 @@ class Sidebar extends Component
 					'items' => $overviewLinks
 				],
 				[
-					'link' => route('admin.schemas'),
-					'name' => __('admin.schemas'),
+					'link' => route('admin.schema.index'),
+					'name' => __('admin.schemas.header'),
 					'active' => Route::currentRouteName() === 'admin.schemas',
 					'iconClass' => 'fas fa-database fa-fw',
 					'items' => $schemasLinks,

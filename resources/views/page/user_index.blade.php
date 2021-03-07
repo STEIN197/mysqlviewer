@@ -19,15 +19,15 @@
 						<td>{{ $row->User }}</td>
 						<td>{{ $row->Host }}</td>
 						<td>
-							<a href={{ route('admin.user', ['name' => "{$row->User}@{$row->Host}"]) }}>@lang('admin.users.edit')</a>
+							<a href={{ route('admin.user.read', ['name' => "{$row->User}@{$row->Host}"]) }}>@lang('admin.users.edit')</a>
 						</td>
 						<td>
-							<a href="{{ route('admin.deleteEntity', ['type' => 'user', 'id' => "{$row->User}@{$row->Host}"]) }}">@lang('admin.users.delete')</a>
+							<a href="{{ route('admin.delete.user', ['name' => "{$row->User}@{$row->Host}"]) }}">@lang('admin.users.delete')</a>
 						</td>
 					</tr>
 				@endforeach
 			</tbody>
 		</table>
-		<a href="{{ route('admin.newEntity', ['type' => 'user']) }}" class="btn btn-primary btn-sm">@lang('admin.add')</a>
+		<a href="{{ route('admin.new.user') }}" class="btn btn-primary btn-sm">@lang('admin.add')</a>
 	</section>
 </div>

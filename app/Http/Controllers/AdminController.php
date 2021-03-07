@@ -12,53 +12,6 @@ class AdminController extends Controller {
 		return Page::new('admin')->render();
 	}
 
-	public function users(Request $request) {
-		return Page::new('users')->withData([
-			'variables' => DB::select(DB::raw('SELECT * FROM mysql.user'))
-		])->render();
-	}
-
-	public function user(Request $request, string $name) {
-		$user = new UserController(...explode('@', $name));
-		return Page::new('user')->withData([
-			'name' => $name,
-			'login' => $user->getLogin(),
-			'limits' => $user->getLimits(),
-			'privileges' => $user->getPrivileges()
-		])->render();
-	}
-
-	public function updateUser(Request $request, string $name) {
-		$user = new UserController(...explode('@', $name));
-		return $user->update($request->all());
-	}
-
-	public function newEntity(Request $request, string $type) {
-		return Page::new("new_{$type}")->withData([
-			'columns' => [
-				'Host', 'User', 'Password'
-			]
-		])->render();
-	}
-
-	public function createEntity(Request $request, string $type) {
-		switch ($type) {
-			case 'user':
-				return UserController::new($request->all());
-			default:
-				return "No template for type $type";
-		}
-	}
-
-	public function deleteEntity(Request $request, string $type, string $id) {
-		switch ($type) {
-			case 'user':
-				return UserController::delete($id);
-			default:
-				return "No template for type $type";
-		}
-	}
-
 	public function vars(Request $request) {
 		return Page::new('vars')->withData([
 			'variables' => DB::select(DB::raw('SHOW VARIABLES'))
@@ -80,10 +33,7 @@ class AdminController extends Controller {
 			'encodings' => $encodings
 		])->render();
 	}
-	// TODO
-	public function schemas(Request $request) {
-		return $this->index($request);
-	}
+
 	// TODO
 	public function schema(Request $request, $name) {
 		return $this->index($request);

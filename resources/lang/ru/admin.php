@@ -4,8 +4,12 @@
 		'variables' => 'Переменные',
 		'engines' => 'Типы таблиц',
 		'encodings' => 'Кодировки',
-		'schemas' => 'Базы данных',
+		'schemas' => [
+			'header' => 'Базы данных',
+			'tables' => 'Таблицы'
+		],
 		'add' => 'Добавить',
+		'delete' => 'Удалить',
 		'server' => [
 			'mysql' => [
 				'header' => 'Конфигурация MySQL',

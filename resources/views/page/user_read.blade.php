@@ -59,7 +59,7 @@
 					@endforeach
 				</tbody>
 			</table>
-			<x-form-field type="button" name="login" :placeholder="__('admin.user.submit')" class="btn btn-primary btn-sm btn-block"/>
+			<x-form-field type="button" name="login" :placeholder="__('admin.user.submit')" class="btn btn-primary btn-sm"/>
 		</form>
 	</section>
 </div>
