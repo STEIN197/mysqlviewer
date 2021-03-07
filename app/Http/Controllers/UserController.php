@@ -15,24 +15,24 @@ class UserController extends Controller {
 		])->render();
 	}
 
-	public function read(Request $request, string $name) {
-		$user = User::read(self::dataFromName($name));
+	public function read(Request $request, string $id) {
+		$user = User::read(self::dataFromName($id));
 		if (!$user)
 			return abort(404);
 		return Page::new('user_read')->withData([
-			'name' => $name,
+			'name' => $id,
 			'login' => $user->getLogin(),
 			'limits' => $user->getLimits(),
 			'privileges' => $user->getPrivileges()
 		])->render();
 	}
 
-	public function update(Request $request, string $name) {
-		$user = User::read(self::dataFromName($name));
+	public function update(Request $request, string $id) {
+		$user = User::read(self::dataFromName($id));
 		if (!$user)
 			return abort(404);
 		$user->update($request->all());
-		return redirect()->action([UserController::class, 'read'], ['name' => (string) $user]);
+		return redirect()->action([UserController::class, 'read'], ['id' => (string) $user]);
 	}
 
 	public function new(Request $request) {
@@ -53,8 +53,8 @@ class UserController extends Controller {
 		return back();
 	}
 
-	private static function dataFromName(string $name): array {
-		[$login, $host] = explode('@', $name);
+	private static function dataFromName(string $id): array {
+		[$login, $host] = explode('@', $id);
 		return [
 			'User' => $login,
 			'Host' => $host

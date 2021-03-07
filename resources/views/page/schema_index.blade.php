@@ -20,12 +20,12 @@
 						<td>{{ $row->DEFAULT_CHARACTER_SET_NAME }}</td>
 						<td>{{ $row->DEFAULT_COLLATION_NAME }}</td>
 						<td>
-							<a href="{{ route('admin.deleteEntity', ['type' => 'user', 'id' => $row->SCHEMA_NAME]) }}">@lang('admin.delete')</a>
+							<a href="{{ route('admin.delete.schema', ['name' => $row->SCHEMA_NAME]) }}">@lang('admin.delete')</a>
 						</td>
 					</tr>
 				@endforeach
 			</tbody>
 		</table>
-		<a href="{{ route('admin.newEntity', ['type' => 'schema']) }}" class="btn btn-primary btn-sm">@lang('admin.add')</a>
+		<a href="{{ route('admin.new.schema') }}" class="btn btn-primary btn-sm">@lang('admin.add')</a>
 	</section>
 </div>

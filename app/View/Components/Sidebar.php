@@ -32,7 +32,7 @@ class Sidebar extends Component
 			foreach ($user->getAccessibleDatabases() as $dbname) {
 				$schemasLinks[] = [
 					'link' => route('admin.schema.read', [
-						'name' => $dbname
+						'id' => $dbname
 					]),
 					'name' => $dbname,
 					'active' => Route::currentRouteName() === 'admin.schema.read' && request()->name === $dbname,

@@ -85,7 +85,7 @@ class User extends Entity {
 		$this->updateLimits($data);
 		$this->updatePrivileges($data);
 		$this->updateCredentials($data);
-		$this->data = self::retrieve($data);
+		$this->data = array_merge($this->data, $data);
 	}
 
 	public function __toString(): string {

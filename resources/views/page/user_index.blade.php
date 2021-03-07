@@ -19,10 +19,10 @@
 						<td>{{ $row->User }}</td>
 						<td>{{ $row->Host }}</td>
 						<td>
-							<a href={{ route('admin.user.read', ['name' => "{$row->User}@{$row->Host}"]) }}>@lang('admin.users.edit')</a>
+							<a href={{ route('admin.user.read', ['id' => "{$row->User}@{$row->Host}"]) }}>@lang('admin.users.edit')</a>
 						</td>
 						<td>
-							<a href="{{ route('admin.delete.user', ['name' => "{$row->User}@{$row->Host}"]) }}">@lang('admin.users.delete')</a>
+							<a href="{{ route('admin.delete.user', ['id' => "{$row->User}@{$row->Host}"]) }}">@lang('admin.users.delete')</a>
 						</td>
 					</tr>
 				@endforeach

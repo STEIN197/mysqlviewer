@@ -13,9 +13,9 @@ use App\Http\Middleware\Main;
 Route::middleware(Main::class)->group(function() {
 	Route::prefix('api')->group(function() {
 		Route::get('/', [ApiController::class, 'index']);
-		Route::get('/database/{name}/', function(Request $request) {
-			return 1;
-		});
+		// Route::get('/database/{id}/', function(Request $request) {
+		// 	return 1;
+		// });
 	});
 
 	Route::get('/logout/', [LoginController::class, 'logout'])->name('logout');
@@ -30,15 +30,15 @@ Route::middleware(Main::class)->group(function() {
 
 				Route::prefix('user')->group(function () {
 					Route::get('/', [UserController::class, 'index'])->name('user.index');
-					Route::get('/{name}/', [UserController::class, 'read'])->name('user.read');
-					Route::post('/{name}/', [UserController::class, 'update'])->name('user.update');
+					Route::get('/{id}/', [UserController::class, 'read'])->name('user.read');
+					Route::post('/{id}/', [UserController::class, 'update'])->name('user.update');
 				});
 
 				Route::prefix('schema')->group(function () {
 					Route::get('/', [SchemaController::class, 'index'])->name('schema.index');
-					Route::get('/{name}/', [SchemaController::class, 'read'])->name('schema.read');
-					Route::post('/{name}/', [SchemaController::class, 'update'])->name('schema.update');
-					// Route::get('/{name}/table/', [SchemaController::class, 'tables'])->name('schema.table');
+					Route::get('/{id}/', [SchemaController::class, 'read'])->name('schema.read');
+					Route::post('/{id}/', [SchemaController::class, 'update'])->name('schema.update');
+					// Route::get('/{id}/table/', [SchemaController::class, 'tables'])->name('schema.table');
 				});
 
 				Route::get('/vars/', [AdminController::class, 'vars'])->name('vars');
@@ -52,14 +52,14 @@ Route::middleware(Main::class)->group(function() {
 						Route::post('/user/', [UserController::class, 'create']);
 
 						Route::get('/schema/', [SchemaController::class, 'new'])->name('schema');
-						Route::post('/schema/{name}', [SchemaController::class, 'create']);
+						Route::post('/schema/{id}', [SchemaController::class, 'create']);
 					});
 				});
 			
 				Route::prefix('delete')->group(function () {
 					Route::name('delete.')->group(function() {
-						Route::get('/schema/{name}', [SchemaController::class, 'delete'])->name('schema');
-						Route::get('/user/{name}', [UserController::class, 'delete'])->name('user');
+						Route::get('/schema/{id}', [SchemaController::class, 'delete'])->name('schema');
+						Route::get('/user/{id}', [UserController::class, 'delete'])->name('user');
 					});
 				});
 			});
