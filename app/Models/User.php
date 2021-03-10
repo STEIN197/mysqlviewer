@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\DB;
 
 class User extends Entity {
 
-
 	private static array $privilegesMap = [
 		'Alter_priv' => 'ALTER',
 		'Alter_routine_priv' => 'ALTER ROUTINE',
@@ -26,7 +25,7 @@ class User extends Entity {
 		'Insert_priv' => 'INSERT',
 		'Lock_tables_priv' => 'LOCK TABLES',
 		'Process_priv' => 'PROCESS',
-		'proxies_priv' => 'PROXY 	Se',
+		'proxies_priv' => 'PROXY',
 		'References_priv' => 'REFERENCES',
 		'Reload_priv' => 'RELOAD',
 		'Repl_client_priv' => 'REPLICATION CLIENT',
@@ -88,10 +87,6 @@ class User extends Entity {
 		$this->data = array_merge($this->data, $data);
 	}
 
-	public function __toString(): string {
-		return $this->data['User'].'@'.$this->data['Host'];
-	}
-
 	private function updateCredentials(array $data): void {
 		if ($data['Password'])
 			DB::statement("ALTER USER {$this->fullName(true)} IDENTIFIED BY ".self::escape($data['Password']));
@@ -143,5 +138,13 @@ class User extends Entity {
 	public static function read(array $data): ?User {
 		$data = DB::select(DB::raw('SELECT * FROM mysql.user WHERE User = '.self::escape($data['User']).' AND Host = '.self::escape($data['Host'])));
 		return $data ? new self((array) $data[0]) : null;
+	}
+
+	public static function list(array $data = []): array {
+		$data = DB::select("SELECT * FROM mysql.user");
+		$result = [];
+		foreach ($data as $row)
+			$result[] = new static((array) $row);
+		return $result;
 	}
 }

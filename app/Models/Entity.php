@@ -3,8 +3,12 @@
 namespace App\Models;
 
 use \Exception;
+use Illuminate\Support\Facades\DB;
 
 abstract class Entity {
+
+	public static array $_COLUMNS = [];
+	public static array $_ACTIONS = [];
 
 	protected array $data;
 
@@ -12,7 +16,7 @@ abstract class Entity {
 		$this->data = $data;
 	}
 
-	public function getData(): array {
+	public function data(): array {
 		return $this->data;
 	}
 
@@ -26,9 +30,20 @@ abstract class Entity {
 		$this->data[$property] = $value;
 	}
 
+	public static function list(array $data = []): array {
+		$result = DB::select(static::listQuery($data));
+		$list = [];
+		foreach ($result as $row)
+			$list[] = new static((array) $row);
+		return $list;
+	}
+
+	public abstract function id(): string;
 	public abstract function delete(): void;
 	public abstract function update(array $data): void;
 	
 	public static abstract function create(array $data): ?Entity;
-	public static abstract function read(array $data): ?Entity;
+	public static abstract function read(string $id, array $data = []): ?Entity;
+
+	protected static abstract function listQuery(array $data): string;
 }

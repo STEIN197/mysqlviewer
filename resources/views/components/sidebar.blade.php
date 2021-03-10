@@ -1,24 +1,14 @@
 <aside class="nowrap">
 	<ul class="list-unstyled">
 		@foreach ($links as $link)
-			<li class="{{ $link['active'] ? 'active' : '' }}">
-				<a href="{{ $link['link'] }}" class="c-default fw-medium nolink">
-					<i class="{{ $link['iconClass'] }}"></i>
-					<span>{{ $link['name'] }}</span>
-				</a>
-				@if (@$link['items'])
-					<ul class="list-unstyled{{ @$link['expands'] ? ' js-accordion' : '' }}">
-						@foreach ($link['items'] as $child)
-							<li class="{{ @$link['expands'] ? 'js-accordion-item collapsed' : '' }} {{ $child['active'] ? 'active' : '' }}">
-								<a href="{{ $child['link'] }}" class="c-default fw-medium nolink">
-									<i class="{{ @$child['iconClass'] }}"></i>
-									<span>{{ $child['name'] }}</span>
-								</a>
-							</li>
-						@endforeach
-					</ul>
-				@endif
-			</li>
+			@if ($link['visible'])
+				<li class="{{ $link['active'] ? 'active' : '' }}">
+					<a href="{{ $link['link'] }}" class="c-default fw-medium nolink">
+						<i class="{{ $link['iconClass'] }}"></i>
+						<span>{{ $link['name'] }}</span>
+					</a>
+				</li>
+			@endif
 		@endforeach
 	</ul>
 	<form action="">

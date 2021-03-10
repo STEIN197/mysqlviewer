@@ -6,32 +6,97 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\View\Component;
 use App\PDOWrapper;
 
-class Sidebar extends Component
-{
-    /**
-     * Create a new component instance.
-     *
-     * @return void
-     */
-    public function __construct() {
-        //
-    }
+class Sidebar extends Component {
 
-    /**
-     * Get the view / contents that represent the component.
-     *
-     * @return \Illuminate\View\View|string
-     */
-    public function render() {
-        return view('components.sidebar', $this->getData());
+	public function __construct() {}
+
+	public function render() {
+		return view('components.sidebar', $this->getData());
 	}
 	
 	private function getData(): array {
-		$schemasLinks = [];
+		$requestType = request()->type;
+		return [
+			'links' => [
+				[
+					'link' => route('admin'),
+					'name' => __('admin.overview'),
+					'active' => strpos(Route::currentRouteName(), 'admin') === 0,
+					'iconClass' => 'fas fa-list fa-fw',
+					'visible' => true
+				],
+				[
+					'link' => route('index', [
+						'type' => 'user'
+					]),
+					'name' => __('entity.type.user.index'),
+					'active' => $requestType = 'user',
+					'iconClass' => 'fas fa-users fa-fw',
+					'visible' => auth()->user()->isRoot()
+				],
+				[
+					'link' => route('index', [
+						'type' => 'variable'
+					]),
+					'name' => __('entity.type.variable.index'),
+					'active' => $requestType = 'variable',
+					'iconClass' => 'fas fa-code fa-fw',
+					'visible' => true
+				],
+				[
+					'link' => route('index', [
+						'type' => 'engine'
+					]),
+					'name' => __('entity.type.engine.index'),
+					'active' => $requestType === 'engine',
+					'iconClass' => 'fas fa-table fa-fw',
+					'visible' => true
+				],
+				[
+					'link' => route('index', [
+						'type' => 'encoding'
+					]),
+					'name' => __('entity.type.encoding.index'),
+					'active' => $requestType === 'encoding',
+					'iconClass' => 'fas fa-spell-check fa-fw',
+					'visible' => true
+				],
+				[
+					'link' => route('index', [
+						'type' => 'schema'
+					]),
+					'name' => __('entity.type.encoding.index'),
+					'active' => $requestType === 'schema',
+					'iconClass' => 'fas fa-database fa-fw',
+					'visible' => true
+				],
+				[
+					'link' => route('index', [
+						'type' => 'sql'
+					]),
+					'name' => __('admin.sql'),
+					'active' => Route::currentRouteName() === 'admin.sql',
+					'iconClass' => 'fas fa-terminal fa-fw',
+					'visible' => true
+				],
+				[
+					'link' => route('logout'),
+					'name' => __('route.logout'),
+					'active' => Route::currentRouteName() === 'route.logout',
+					'iconClass' => 'fas fa-sign-out-alt fa-fw',
+					'visible' => true
+				]
+			],
+		];
+	}
+
+	private function schemasLinks(): array {
+		$result = [];
 		if ($user = session()->get('user')) {
 			foreach ($user->getAccessibleDatabases() as $dbname) {
-				$schemasLinks[] = [
-					'link' => route('admin.schema.table', [
+				$result[] = [
+					'link' => route('read', [
+						'type' => 'schema',
 						'id' => $dbname
 					]),
 					'name' => $dbname,
@@ -40,62 +105,6 @@ class Sidebar extends Component
 				];
 			}
 		}
-		$overviewLinks = [
-			[
-				'link' => route('admin.vars'),
-				'name' => __('admin.variables'),
-				'active' => Route::currentRouteName() === 'admin.vars',
-				'iconClass' => 'fas fa-code fa-fw'
-			],
-			[
-				'link' => route('admin.engines'),
-				'name' => __('admin.engines'),
-				'active' => Route::currentRouteName() === 'admin.engines',
-				'iconClass' => 'fas fa-table fa-fw'
-			],
-			[
-				'link' => route('admin.encodings'),
-				'name' => __('admin.encodings'),
-				'active' => Route::currentRouteName() === 'admin.encodings',
-				'iconClass' => 'fas fa-spell-check fa-fw'
-			],
-		];
-		if (auth()->user()->isRoot())
-			array_unshift($overviewLinks, [
-				'link' => route('admin.user.index'),
-				'name' => __('admin.users.header'),
-				'active' => Route::currentRouteName() === 'admin.users',
-				'iconClass' => 'fas fa-users fa-fw'
-			]);
-		return [
-			'links' => [
-				[
-					'link' => route('admin'),
-					'name' => __('admin.overview'),
-					'active' => strpos(Route::currentRouteName(), 'admin') === 0,
-					'iconClass' => 'fas fa-list fa-fw',
-					'items' => $overviewLinks
-				],
-				[
-					'link' => route('admin.schema.index'),
-					'name' => __('admin.schemas.header'),
-					'active' => Route::currentRouteName() === 'admin.schemas',
-					'iconClass' => 'fas fa-database fa-fw',
-					'items' => $schemasLinks,
-				],
-				[
-					'link' => route('admin.sql'),
-					'name' => __('admin.sql'),
-					'active' => Route::currentRouteName() === 'admin.sql',
-					'iconClass' => 'fas fa-terminal fa-fw'
-				],
-				[
-					'link' => route('logout'),
-					'name' => __('route.logout'),
-					'active' => Route::currentRouteName() === 'route.logout',
-					'iconClass' => 'fas fa-sign-out-alt fa-fw'
-				]
-			],
-		];
+		return $result;
 	}
 }

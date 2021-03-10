@@ -8,9 +8,12 @@
 	class Authenticate {
 
 		public function handle(Request $request, Closure $next) {
+			$isAdminRoute = in_array(Route::currentRouteName(), [
+				'admin', 'index', 'create', 'read', 'update', 'delete'
+			]);
 			if (auth()->check())
-				return strpos(Route::currentRouteName(), 'admin') === 0 ? $next($request) : redirect()->route('admin');
+				return $isAdminRoute ? $next($request) : redirect()->route('admin');
 			else
-				return strpos(Route::currentRouteName(), 'admin') === 0 ? redirect()->route('index') : $next($request);
+				return $isAdminRoute ? redirect()->route('home') : $next($request);
 		}
 	}

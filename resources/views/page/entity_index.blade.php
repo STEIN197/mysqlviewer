@@ -3,19 +3,23 @@
 		<x-sidebar/>
 	</section>
 	<section id="content" class="split-pane" data-size="80">
-		<p class="fs-20 fw-bold">@lang('admin.server.mysql.vars.header')</p>
+		<p class="fs-20 fw-bold">@lang("entity.type.{$type}.index")</p>
 		<table class="table table-sm table-bordered table-light table-props">
 			<thead class="thead-dark">
 				<tr>
-					<th>@lang('admin.server.mysql.vars.name')</th>
-					<th>@lang('admin.server.mysql.vars.value')</th>
+					<th>@lang('entity.column.name')</th>
+					@foreach ($class::$_COLUMNS as $colName)
+						<th>@lang("entity.type.{$type}.column.{$colName}")</th>
+					@endforeach
 				</tr>
 			</thead>
 			<tbody>
-				@foreach ($variables as $row)
+				@foreach ($data as $item)
 					<tr>
-						<td>{{ $row->Variable_name }}</td>
-						<td>{{ $row->Value }}</td>
+						<td>{{ $item->id() }}</td>
+						@foreach ($class::$_COLUMNS as $colName)
+							<td>{{ $item->{$colName} }}</td>
+						@endforeach
 					</tr>
 				@endforeach
 			</tbody>
