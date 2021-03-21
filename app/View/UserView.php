@@ -1,16 +1,18 @@
 <?php
 namespace App\View;
 
-class VariableView extends EntityView {
+class UserView extends EntityView {
 
 	public function indexColumns(): array {
 		return [
-			'Variable_name' => [],
-			'Value' => []
+			'User' => [],
+			'Host' => [],
 		];
 	}
 
 	public function indexActions(): array {
-		return [];
+		return [
+			'delete', 'update', 'create'
+		];
 	}
 }

@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\DB;
 
 class Variable extends Entity {
 
-	public static array $_COLUMNS = [
-		'Value'
-	];
-	public static array $_ACTIONS = [];
-
 	public function id(): string {
 		return $this->Variable_name;
 	}

@@ -66,7 +66,7 @@ class Sidebar extends Component {
 					'link' => route('index', [
 						'type' => 'schema'
 					]),
-					'name' => __('entity.type.encoding.index'),
+					'name' => __('entity.type.schema.index'),
 					'active' => $requestType === 'schema',
 					'iconClass' => 'fas fa-database fa-fw',
 					'visible' => true

@@ -4,11 +4,6 @@ namespace App\Entity;
 
 class Encoding extends Entity {
 
-	public static array $_COLUMNS = [
-		'COLLATION_NAME', 'DESCRIPTION', 'MAXLEN'
-	];
-	public static array $_ACTIONS = [];
-
 	public function id(): string {
 		return $this->CHARACTER_SET_NAME;
 	}

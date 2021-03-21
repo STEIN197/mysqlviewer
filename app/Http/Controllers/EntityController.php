@@ -12,17 +12,31 @@ class EntityController extends Controller {
 
 	public function index(Request $request, string $type = null) {
 		$entityList = call_user_func([Entity::getClass($type), 'list'], $request->all());
+		$entityView = EntityView::getClass($type);
+		if ($entityView)
+			$entityView = new $entityView;
 		return Page::new('entity_index')->withData([
 			'class' => Entity::getClass($type),
-			'view' => EntityView::getClass($type),
+			'view' => $entityView,
 			'type' => $type,
 			'data' => $entityList
 		])->render();
 	}
 
 	public function create(Request $request, string $type) {
-		$entity = call_user_func([Entity::getClass($type), 'create'], $request->all());
-		return redirect()->route('index', $type);
+		if ($request->isMethod('POST')) {
+			$entity = call_user_func([Entity::getClass($type), 'create'], $request->all());
+			return redirect()->route('index', $type);
+		} else {
+			$entityView = EntityView::getClass($type);
+			if ($entityView)
+				$entityView = new $entityView;
+			return Page::new('entity_create')->withData([
+				'class' => Entity::getClass($type),
+				'view' => $entityView,
+				'type' => $type,
+			])->render();
+		}
 	}
 
 	public function read(Request $request, string $type, string $id) {
@@ -47,7 +61,7 @@ class EntityController extends Controller {
 		if (!$entity)
 			return abort(404);
 		$entity->delete();
-		return redirect()->route('index', ['type' => $type, 'id' => $id]);
+		return redirect()->route('index', ['type' => $type]);
 	}
 
 	private static function entityView(string $type): string {

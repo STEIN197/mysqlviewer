@@ -4,12 +4,6 @@ namespace App\Entity;
 
 class Engine extends Entity {
 
-	public static array $_COLUMNS = [
-		'COMMENT', 'SUPPORT', 'TRANSACTIONS'
-	];
-
-	public static array $_ACTIONS = [];
-
 	public function id(): string {
 		return $this->ENGINE;
 	}

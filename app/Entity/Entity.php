@@ -7,9 +7,6 @@ use Illuminate\Support\Facades\DB;
 
 abstract class Entity {
 
-	public static array $_COLUMNS = [];
-	public static array $_ACTIONS = [];
-
 	protected array $data;
 
 	protected function __construct(array $data) {

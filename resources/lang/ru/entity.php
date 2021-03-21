@@ -8,12 +8,13 @@
 			'submit' => 'Применить',
 		],
 		'column' => [
-			'name' => 'Имя'
+			'actions' => 'Действия'
 		],
 		'type' => [
 			'variable' => [
 				'index' => 'Переменные',
 				'column' => [
+					'Variable_name' => 'Имя',
 					'Value' => 'Значение'
 				]
 			],
@@ -26,7 +27,14 @@
 				]
 			],
 			'user' => [
-				'index' => 'Пользователи'
+				'index' => 'Пользователи',
+				'action' => [
+					'create' => 'Новый пользователь'
+				],
+				'column' => [
+					'User' => 'Имя',
+					'Host' => 'Хост'
+				]
 			],
 			'encoding' => [
 				'index' => 'Кодировки',
@@ -37,7 +45,12 @@
 				]
 			],
 			'schema' => [
-				'index' => 'Базы данных'
+				'index' => 'Базы данных',
+				'column' => [
+					'SCHEMA_NAME' => 'Название',
+					'DEFAULT_CHARACTER_SET_NAME' => 'Кодировка',
+					'DEFAULT_COLLATION_NAME' => 'Сравнение'
+				]
 			],
 		]
 	];
