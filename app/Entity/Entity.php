@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Entity;
 
 use \Exception;
 use Illuminate\Support\Facades\DB;
@@ -36,6 +36,29 @@ abstract class Entity {
 		foreach ($result as $row)
 			$list[] = new static((array) $row);
 		return $list;
+	}
+
+	public static final function types(): array {
+		$discardPatterns = [
+			'.', '..', substr(__FILE__, strlen(__DIR__))
+		];
+		return
+			array_map(
+				function($v) {
+					return strtolower(explode('.', $v)[0]);
+				},
+				array_filter(
+					scandir(__DIR__),
+					function($v) use ($discardPatterns) {
+						return !in_array($v, $discardPatterns);
+					}
+				)
+			);
+	}
+
+	public static final function getClass(string $type): ?string {
+		$className = '\\App\\Entity\\'.ucfirst(strtolower($type));
+		return class_exists($className) ? $className : null;
 	}
 
 	public abstract function id(): string;

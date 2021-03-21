@@ -5,6 +5,7 @@ namespace App\View\Components;
 use Illuminate\Support\Facades\Route;
 use Illuminate\View\Component;
 use App\PDOWrapper;
+use App\Entity\Entity;
 
 class Sidebar extends Component {
 
@@ -30,7 +31,7 @@ class Sidebar extends Component {
 						'type' => 'user'
 					]),
 					'name' => __('entity.type.user.index'),
-					'active' => $requestType = 'user',
+					'active' => $requestType === 'user',
 					'iconClass' => 'fas fa-users fa-fw',
 					'visible' => auth()->user()->isRoot()
 				],
@@ -39,7 +40,7 @@ class Sidebar extends Component {
 						'type' => 'variable'
 					]),
 					'name' => __('entity.type.variable.index'),
-					'active' => $requestType = 'variable',
+					'active' => $requestType === 'variable',
 					'iconClass' => 'fas fa-code fa-fw',
 					'visible' => true
 				],

@@ -7,6 +7,7 @@ use App\Http\Controllers\ApiController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\EntityController;
 use App\Http\Middleware\Authenticate;
+use App\Http\Middleware\EntityExistance;
 use App\Http\Middleware\Main;
 
 function crud(): array {
@@ -27,11 +28,13 @@ Route::middleware(Main::class)->group(function() {
 		Route::get('/', [LoginController::class, 'index'])->name('home');
 		Route::prefix('admin')->group(function () {
 			Route::get("/", [AdminController::class, 'index'])->name('admin');
-			Route::get("/{type}/", [EntityController::class, 'index'])->name("index");
-			foreach (crud() as $action) {
-				Route::get("/{$action}/{type}/{id?}", [EntityController::class, $action])->name($action);
-				Route::post("/{$action}/{type}/{id?}", [EntityController::class, $action]);
-			}
+			Route::middleware(EntityExistance::class)->group(function () {
+				Route::get("/{type}/", [EntityController::class, 'index'])->name("index");
+				foreach (crud() as $action) {
+					Route::get("/{$action}/{type}/{id?}", [EntityController::class, $action])->name($action);
+					Route::post("/{$action}/{type}/{id?}", [EntityController::class, $action]);
+				}
+			});
 		});
 	});
 });
