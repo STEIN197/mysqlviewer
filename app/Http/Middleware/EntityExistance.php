@@ -8,7 +8,9 @@ use App\Entity\Entity;
 
 class EntityExistance {
 
-    public function handle(Request $request, Closure $next) {
-		return Entity::getClass($request->type) ? $next($request) : abort(404);
+	public function handle(Request $request, Closure $next) {
+		$className = Entity::getClass($request->type);
+		$is404 = !$className || $request->id && !$className::read($request->id, $request->all());
+		return $is404 ? abort(404) : $next($request);
 	}
 }
