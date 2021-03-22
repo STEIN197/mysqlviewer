@@ -120,8 +120,11 @@ class User extends Entity {
 	public static function create(array $data): ?User {
 		$name = "'".addslashes($data['User'])."'@'".addslashes($data['Host'])."'";
 		$password = addslashes($data['Password']);
-		$result = DB::statement("CREATE USER {$userName} IDENTIFIED BY '{$password}'");
-		return $result ? self::read($data) : null;
+		$result = DB::statement("CREATE USER {$name} IDENTIFIED BY '{$password}'");
+		$user = self::read("{$data['User']}@{$data['Host']}");
+		$user->updateLimits($data);
+		$user->updatePrivileges($data);
+		return $user;
 	}
 
 	public static function read(string $id, array $data = []): ?User {

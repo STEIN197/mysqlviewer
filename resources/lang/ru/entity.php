@@ -80,6 +80,9 @@
 			],
 			'schema' => [
 				'index' => 'Базы данных',
+				'action' => [
+					'create' => 'Нова база данных'
+				],
 				'column' => [
 					'SCHEMA_NAME' => 'Название',
 					'DEFAULT_CHARACTER_SET_NAME' => 'Кодировка',

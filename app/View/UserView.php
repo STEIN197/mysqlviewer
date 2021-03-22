@@ -18,11 +18,16 @@ class UserView extends EntityView {
 
 	public function editableProperties(): array {
 		return [
-			'Host' => [],
-			'User' => [],
+			'Host' => [
+				'required' => true
+			],
+			'User' => [
+				'required' => true
+			],
 			'Password' => [
 				'type' => 'password',
-				'reset' => true
+				'reset' => true,
+				'required' => true
 			],
 			'Alter_priv' => [
 				'type' => 'checkbox'
@@ -112,16 +117,20 @@ class UserView extends EntityView {
 				'type' => 'checkbox'
 			],
 			'max_questions' => [
-				'type' => 'number'
+				'type' => 'number',
+				'default' => 0
 			],
 			'max_updates' => [
-				'type' => 'number'
+				'type' => 'number',
+				'default' => 0
 			],
 			'max_connections' => [
-				'type' => 'number'
+				'type' => 'number',
+				'default' => 0
 			],
 			'max_user_connections' => [
-				'type' => 'number'
+				'type' => 'number',
+				'default' => 0
 			],
 		];
 	}

@@ -22,7 +22,8 @@ class SchemaView extends EntityView {
 	public function editableProperties(): array {
 		return [
 			'SCHEMA_NAME' => [
-				'readonly' => true
+				'readonly' => true,
+				'required' => true
 			],
 			'DEFAULT_COLLATION_NAME' => [
 				'type' => 'select',

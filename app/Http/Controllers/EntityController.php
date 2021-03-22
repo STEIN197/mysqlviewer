@@ -22,10 +22,9 @@ class EntityController extends Controller {
 		])->render();
 	}
 
-	// TODO
 	public function create(Request $request, string $type) {
 		if ($request->isMethod('POST')) {
-			$entity = call_user_func([Entity::getClass($type), 'create'], $request->all());
+			$entity = Entity::getClass($type)::create($request->all());
 			return redirect()->route('index', $type);
 		} else {
 			$entityView = EntityView::getClass($type);

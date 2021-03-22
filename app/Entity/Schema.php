@@ -29,7 +29,7 @@ class Schema extends Entity {
 
 	public static function create(array $data): ?Schema {
 		$result = DB::statement("CREATE SCHEMA IF NOT EXISTS `{$data['SCHEMA_NAME']}` CHARACTER SET = `{$data['DEFAULT_CHARACTER_SET_NAME']}` COLLATE = `{$data['DEFAULT_COLLATION_NAME']}`");
-		return $result ? self::read($data) : null;
+		return $result ? self::read($data['SCHEMA_NAME']) : null;
 	}
 
 	public static function read(string $id, array $data = []): ?Schema {
