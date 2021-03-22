@@ -8,9 +8,7 @@
 	class Authenticate {
 
 		public function handle(Request $request, Closure $next) {
-			$isAdminRoute = in_array(Route::currentRouteName(), [
-				'admin', 'index', 'create', 'read', 'update', 'delete'
-			]);
+			$isAdminRoute = strpos($request->path(), 'admin') === 0;
 			if (auth()->check())
 				return $isAdminRoute ? $next($request) : redirect()->route('admin');
 			else

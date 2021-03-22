@@ -22,6 +22,7 @@ class EntityController extends Controller {
 		])->render();
 	}
 
+	// TODO
 	public function create(Request $request, string $type) {
 		if ($request->isMethod('POST')) {
 			$entity = call_user_func([Entity::getClass($type), 'create'], $request->all());
@@ -38,16 +39,28 @@ class EntityController extends Controller {
 		}
 	}
 
+	// TODO
 	public function read(Request $request, string $type, string $id) {
-		return Page::new('entity_read')->withData([
-			'entity' => Entity::getClass($type)::read($id, $request->all())->getData()
-		])->render();
+		// return Page::new('entity_read')->withData([
+		// 	'entity' => Entity::getClass($type)::read($id, $request->all())->getData()
+		// ])->render();
 	}
 
 	public function update(Request $request, string $type, string $id) {
 		$entity = Entity::getClass($type)::read($id, $request->all());
-		$entity->update($request->all());
-		return redirect()->action([self::class, 'read'], ['type' => $type, 'id' => $id]);
+		if ($request->isMethod('POST')) {
+			$entity->update($request->all());
+			return redirect()->action([self::class, 'update'], ['type' => $type, 'id' => $entity->id()]);
+		} else {
+			$entityView = EntityView::getClass($type);
+			if ($entityView)
+				$entityView = new $entityView;
+			return Page::new('entity_update')->withData([
+				'type' => $type,
+				'view' => $entityView,
+				'entity' => $entity
+			])->render();
+		}
 	}
 
 	public function delete(Request $request, string $type, string $id) {

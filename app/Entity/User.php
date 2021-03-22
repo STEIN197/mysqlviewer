@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 
 class User extends Entity {
 
-	private static array $privilegesMap = [
+	private static array $_PRIVILEGES_MAP = [
 		'Alter_priv' => 'ALTER',
 		'Alter_routine_priv' => 'ALTER ROUTINE',
 		'Create_priv' => 'CREATE',
@@ -38,7 +38,7 @@ class User extends Entity {
 		'Trigger_priv' => 'TRIGGER',
 		'Update_priv' => 'UPDATE',
 	];
-	private static array $limitsMap = [
+	private static array $_LIMITS_MAP = [
 		'max_questions' => 'MAX_QUERIES_PER_HOUR',
 		'max_updates' => 'MAX_UPDATES_PER_HOUR',
 		'max_connections' => 'MAX_CONNECTIONS_PER_HOUR',
@@ -49,90 +49,60 @@ class User extends Entity {
 		return "{$this->User}@{$this->Host}";
 	}
 
-	// public function getLogin(): array {
-	// 	static $keys = [
-	// 		'Host', 'User', 'Password',
-	// 	];
-	// 	$result = [];
-	// 	foreach ($this->data as $col => $value)
-	// 		if (in_array($col, $keys))
-	// 			$result[$col] = $value;
-	// 	return $result;
-	// }
-
-	// public function getLimits(): array {
-	// 	$result = [];
-	// 	foreach ($this->data as $col => $value)
-	// 		if (preg_match('/^max_/', $col))
-	// 			$result[$col] = $value;
-	// 	return $result;
-	// }
-
-	// public function getPrivileges(): array {
-	// 	$result = [];
-	// 	foreach ($this->data as $col => $value)
-	// 		if (preg_match('/_priv$/', $col))
-	// 			$result[$col] = $value;
-	// 	return $result;
-	// }
-
-	// public function fullName(bool $escape = false): string {
-	// 	return $escape ? self::escape($this->User).'@'.self::escape($this->Host) : "{$this->User}@{$this->Host}";
-	// }
-
 	public function delete(): void {
 		DB::statement("DROP USER {$this->sqlId()}");
 	}
 
 	public function update(array $data): void {
-		// $this->updateLimits($data);
-		// $this->updatePrivileges($data);
-		// $this->updateCredentials($data);
-		// $this->data = array_merge($this->data, $data);
+		$this->updateLimits($data);
+		$this->updatePrivileges($data);
+		$this->updateCredentials($data);
+		$this->data = array_merge($this->data, $data);
 	}
 
-	// private function updateCredentials(array $data): void {
-	// 	if ($data['Password'])
-	// 		DB::statement("ALTER USER {$this->fullName(true)} IDENTIFIED BY ".self::escape($data['Password']));
-	// 	$fullNameChanged = $data['User'] !== $this->User || $data['Host'] !== $this->Host;
-	// 	if ($fullNameChanged) {
-	// 		DB::statement("RENAME USER {$this->fullName(true)} TO ".self::escape($data['User']).'@'.self::escape($data['Host']));
-	// 		$this->User = $data['User'];
-	// 		$this->Host = $data['Host'];
-	// 	}
-	// }
+	private function updateCredentials(array $data): void {
+		if ($data['Password'])
+			DB::statement("ALTER USER {$this->sqlId()} IDENTIFIED BY ".addslashes($data['Password']));
+		$fullNameChanged = $data['User'] !== $this->User || $data['Host'] !== $this->Host;
+		if ($fullNameChanged)
+			DB::statement("RENAME USER {$this->sqlId()} TO '".addslashes($data['User']).'\'@\''.addslashes($data['Host']).'\'');
+	}
 
-	// private function updateLimits(array $data): void {
-	// 	$limits = [];
-	// 	foreach ($data as $col => $value) {
-	// 		if (!preg_match('/^max_/', $col) || ((float) $this->data[$col]) == ((float) $value) || !@self::$limitsMap[$col])
-	// 			continue;
-	// 		$limits[] = self::$limitsMap[$col]." {$value}";
-	// 	}
-	// 	if ($limits)
-	// 		DB::statement("ALTER USER {$this->fullName(true)} WITH ".join(' ', $limits));
-	// }
+	private function updateLimits(array $data): void {
+		$limits = [];
+		foreach ($data as $col => $value) {
+			if (!preg_match('/^max_/', $col) || ((float) $this->data[$col]) == ((float) $value) || !@self::$_LIMITS_MAP[$col])
+				continue;
+			$limits[] = self::$_LIMITS_MAP[$col]." {$value}";
+		}
+		if ($limits)
+			DB::statement("ALTER USER {$this->sqlId()} WITH ".join(' ', $limits));
+	}
 
-	// private function updatePrivileges(array $data): void {
-	// 	$grants = $revokes = [];
-	// 	foreach ($this->getPrivileges() as $name => $value) {
-	// 		if ($value === 'Y' && !@$data[$name] && @self::$privilegesMap[$name])
-	// 			$revokes[] = self::$privilegesMap[$name];
-	// 	}
-	// 	foreach ($data as $col => $value) {
-	// 		if (!preg_match('/_priv$/', $col) || $this->data[$col] === ($value ? 'Y' : 'N') || !@self::$privilegesMap[$col])
-	// 			continue;
-	// 		$grants[] = self::$privilegesMap[$col];
-	// 	}
-	// 	if ($grants)
-	// 		DB::statement('GRANT '.join(', ', $grants)." ON *.* TO {$this->fullName(true)}");
-	// 	if ($revokes)
-	// 		DB::statement('REVOKE '.join(', ', $revokes)." ON *.* FROM {$this->fullName(true)}");
-	// }
+	private function updatePrivileges(array $data): void {
+		$grants = $revokes = [];
+		foreach ($this->getPrivileges() as $privKey => $privValue) {
+			if ($privValue === 'Y' && !@$data[$privKey] && @self::$_PRIVILEGES_MAP[$privKey])
+				$revokes[] = self::$_PRIVILEGES_MAP[$name];
+		}
+		foreach ($data as $key => $value) {
+			if (!preg_match('/_priv$/', $key) || $this->{$key} === ($value ? 'Y' : 'N') || !@self::$_PRIVILEGES_MAP[$key])
+				continue;
+			$grants[] = self::$_PRIVILEGES_MAP[$key];
+		}
+		if ($grants)
+			DB::statement('GRANT '.join(', ', $grants)." ON *.* TO {$this->sqlId()}");
+		if ($revokes)
+			DB::statement('REVOKE '.join(', ', $revokes)." ON *.* FROM {$this->sqlId()}");
+	}
 
-	// private static function escape(string $string): string {
-	// 	return DB::connection()->getPdo()->quote($string);
-	// }
+	private function getPrivileges(): array {
+		$result = [];
+		foreach ($this->data as $key => $value)
+			if (preg_match('/_priv$/', $key))
+				$result[$key] = $value;
+		return $result;
+	}
 
 	private function sqlId(): string {
 		return

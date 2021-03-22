@@ -16,6 +16,7 @@ class Schema extends Entity {
 
 	public function update(array $data): void {
 		DB::statement("ALTER SCHEMA `{$this->SCHEMA_NAME}` CHARACTER SET = `{$data['DEFAULT_CHARACTER_SET_NAME']}` COLLATE = `{$data['DEFAULT_COLLATION_NAME']}`");
+		$this->data = array_merge($this->data, $data);
 	}
 
 	public function tables(): array {
@@ -36,31 +37,31 @@ class Schema extends Entity {
 		return $data ? new self((array) $data[0]) : null;
 	}
 
-	// public static function charsets(): array {
-	// 	return
-	// 		array_column(
-	// 			array_map(
-	// 				function ($v) {
-	// 					return (array) $v;
-	// 				},
-	// 				DB::select('SELECT CHARACTER_SET_NAME FROM `information_schema`.`CHARACTER_SETS` ORDER BY `CHARACTER_SET_NAME`')
-	// 			),
-	// 			'CHARACTER_SET_NAME'
-	// 		);
-	// }
+	public static function charsets(): array {
+		return
+			array_column(
+				array_map(
+					function ($v) {
+						return (array) $v;
+					},
+					DB::select('SELECT CHARACTER_SET_NAME FROM `information_schema`.`CHARACTER_SETS` ORDER BY `CHARACTER_SET_NAME`')
+				),
+				'CHARACTER_SET_NAME'
+			);
+	}
 
-	// public static function collations(): array {
-	// 	return
-	// 		array_column(
-	// 			array_map(
-	// 				function ($v) {
-	// 					return (array) $v;
-	// 				},
-	// 				DB::select('SELECT COLLATION_NAME FROM `information_schema`.`COLLATIONS` ORDER BY `COLLATION_NAME`')
-	// 			),
-	// 			'COLLATION_NAME'
-	// 		);
-	// }
+	public static function collations(): array {
+		return
+			array_column(
+				array_map(
+					function ($v) {
+						return (array) $v;
+					},
+					DB::select('SELECT COLLATION_NAME FROM `information_schema`.`COLLATIONS` ORDER BY `COLLATION_NAME`')
+				),
+				'COLLATION_NAME'
+			);
+	}
 
 	protected static function listQuery(array $data = []): string {
 		return 'SELECT * FROM `information_schema`.`SCHEMATA`';
