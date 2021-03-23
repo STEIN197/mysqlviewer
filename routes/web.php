@@ -12,7 +12,7 @@ use App\Http\Middleware\Main;
 
 function crud(): array {
 	return [
-		'create', 'read', 'update', 'delete'
+		'create', 'read', 'update', 'delete', 'truncate'
 	];
 }
 

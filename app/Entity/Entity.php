@@ -9,13 +9,15 @@ abstract class Entity {
 
 	protected array $data;
 
-	protected function __construct(array $data) {
+	public function __construct(array $data) {
 		$this->data = $data;
 	}
 
 	public function data(): array {
 		return $this->data;
 	}
+
+	public function truncate(): void {}
 
 	public function __get(string $property) {
 		if (isset($this->data[$property]))

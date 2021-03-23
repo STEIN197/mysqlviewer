@@ -29,7 +29,7 @@ class EntityController extends Controller {
 		} else {
 			$entityView = EntityView::getClass($type);
 			if ($entityView)
-				$entityView = new $entityView;
+				$entityView = new $entityView($entity);
 			return Page::new('entity_create')->withData([
 				'class' => Entity::getClass($type),
 				'view' => $entityView,
@@ -40,9 +40,16 @@ class EntityController extends Controller {
 
 	// TODO
 	public function read(Request $request, string $type, string $id) {
-		// return Page::new('entity_read')->withData([
-		// 	'entity' => Entity::getClass($type)::read($id, $request->all())->getData()
-		// ])->render();
+		$EntityClass = Entity::getClass($type);
+		$entity = $EntityClass::read($id, $request->all());
+		$EntityViewClass = EntityView::getClass($type);
+		$view = new $EntityViewClass($entity);
+		return Page::new('entity_read')->withData([
+			'class' => $EntityClass,
+			'view' => $view,
+			'entity' => $entity,
+			'type' => $type
+		])->render();
 	}
 
 	public function update(Request $request, string $type, string $id) {
@@ -53,7 +60,7 @@ class EntityController extends Controller {
 		} else {
 			$entityView = EntityView::getClass($type);
 			if ($entityView)
-				$entityView = new $entityView;
+				$entityView = new $entityView($entity);
 			return Page::new('entity_update')->withData([
 				'type' => $type,
 				'view' => $entityView,
@@ -69,6 +76,18 @@ class EntityController extends Controller {
 			return redirect()->route('index', ['type' => $type]);
 		} else {
 			return Page::new('entity_delete')->withData([
+				'entity' => $entity,
+			])->render();
+		}
+	}
+
+	public function truncate(Request $request, string $type, string $id) {
+		$entity = Entity::getClass($type)::read($id, $request->all());
+		if ($request->isMethod('POST')) {
+			$entity->truncate();
+			return redirect()->route('index', ['type' => $type]);
+		} else {
+			return Page::new('entity_truncate')->withData([
 				'entity' => $entity,
 			])->render();
 		}

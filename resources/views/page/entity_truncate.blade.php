@@ -3,7 +3,10 @@
 		<x-sidebar/>
 	</section>
 	<section id="content" class="split-pane" data-size="80">
-		<p class="fs-20 fw-bold">@lang("entity.type.{$type}.action.read") {{ $entity->id() }}</p>
-		{!! $view->renderAction('read') !!}
+		<p class="fs-20 fw-bold">@lang('entity.action.truncate') {{ $entity->id() }}?</p>
+		<form action="" method="post">
+			@csrf
+			<button class="btn btn-primary btn-sm">@lang('entity.action.truncate')</button>
+		</form>
 	</section>
 </div>

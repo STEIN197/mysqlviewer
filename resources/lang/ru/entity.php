@@ -5,6 +5,7 @@
 			'read' => 'Просмотреть',
 			'update' => 'Редактировать',
 			'delete' => 'Удалить',
+			'truncate' => 'Очистить',
 			'submit' => 'Применить',
 		],
 		'column' => [
@@ -81,12 +82,18 @@
 			'schema' => [
 				'index' => 'Базы данных',
 				'action' => [
-					'create' => 'Нова база данных'
+					'create' => 'Новая база данных',
+					'read' => 'Таблицы'
 				],
 				'column' => [
 					'SCHEMA_NAME' => 'Название',
 					'DEFAULT_CHARACTER_SET_NAME' => 'Кодировка',
-					'DEFAULT_COLLATION_NAME' => 'Сравнение'
+					'DEFAULT_COLLATION_NAME' => 'Сравнение',
+					'TABLE_NAME' => 'Имя таблицы',
+					'TABLE_ROWS' => 'Строки',
+					'ENGINE' => 'Тип',
+					'TABLE_COLLATION' => 'Сравнение',
+					'DATA_LENGTH' => 'Размер',
 				]
 			],
 		]

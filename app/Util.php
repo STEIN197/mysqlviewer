@@ -22,4 +22,21 @@ final class Util {
 		$value = strtolower($value);
 		return self::isBool($value) ? isset(self::$_BOOL_MAP[$value]) : null;
 	}
+
+	public static function formatBytes(int $bytes): string {
+		static $powers = [
+			'B',
+			'KB',
+			'MB',
+			'GB',
+			'TB',
+		];
+		$size = $bytes;
+		$i = 0;
+		while ($size > 1024) {
+			$size /= 1024;
+			$i++;
+		}
+		return "{$size} {$powers[$i]}";
+	}
 }

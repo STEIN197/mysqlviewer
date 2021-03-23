@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Generator;
 use Illuminate\Support\Facades\DB;
 
 class Schema extends Entity {
@@ -19,8 +20,21 @@ class Schema extends Entity {
 		$this->data = array_merge($this->data, $data);
 	}
 
-	public function tables(): array {
-		return DB::select("SELECT * FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = '{$this->SCHEMA_NAME}'");
+	public function truncate(): void {
+		$dbName = strtolower($this->SCHEMA_NAME);
+		$result = DB::connection("mysql:{$dbName}")->select('SHOW TABLES');
+		if (!sizeof($result))
+			return;
+		$tables = [];
+		foreach ($result as $row)
+			$tables[] = '`'.$row->{"Tables_in_{$this->SCHEMA_NAME}"}.'`';
+		DB::connection("mysql:{$dbName}")->statement('DROP TABLE IF EXISTS '.join(', ', $tables));
+	}
+
+	public function tables(): Generator {
+		$result = DB::select("SELECT * FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = '{$this->SCHEMA_NAME}'");
+		foreach ($result as $row)
+			yield new Table((array) $row);
 	}
 
 	public function __toString(): string {
