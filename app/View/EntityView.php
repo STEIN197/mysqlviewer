@@ -22,8 +22,14 @@ abstract class EntityView {
 
 	public function renderAction(string $action): string {
 		switch (strtolower($action)) {
+			case 'create': {
+				return $this->renderActionCreate();
+			}
 			case 'read': {
 				return $this->renderActionRead();
+			}
+			case 'update': {
+				return $this->renderActionUpdate();
 			}
 			default: {
 				return null;
@@ -31,7 +37,15 @@ abstract class EntityView {
 		}
 	}
 
+	protected function renderActionCreate(): string {
+		return '';
+	}
+
 	protected function renderActionRead(): string {
+		return '';
+	}
+
+	protected function renderActionUpdate(): string {
 		return '';
 	}
 	
