@@ -48,7 +48,7 @@ abstract class EntityView {
 	protected function renderActionUpdate(): string {
 		return '';
 	}
-	
+
 	public abstract function indexActions(): array;
 	public abstract function indexColumns(): array;
 }

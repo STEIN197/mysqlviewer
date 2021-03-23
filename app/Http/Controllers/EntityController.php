@@ -29,7 +29,7 @@ class EntityController extends Controller {
 		} else {
 			$entityView = EntityView::getClass($type);
 			if ($entityView)
-				$entityView = new $entityView($entity);
+				$entityView = new $entityView;
 			return Page::new('entity_create')->withData([
 				'class' => Entity::getClass($type),
 				'view' => $entityView,
@@ -56,7 +56,11 @@ class EntityController extends Controller {
 		$entity = Entity::getClass($type)::read($id, $request->all());
 		if ($request->isMethod('POST')) {
 			$entity->update($request->all());
-			return redirect()->action([self::class, 'update'], ['type' => $type, 'id' => $entity->id()]);
+			$data = ['type' => $type, 'id' => $entity->id()];
+			foreach ($request->all() as $key => $value)
+				if ($key !== '_token' && !preg_match('/^[A-Z_]+$/', $key))
+					$data[$key] = $value;
+			return redirect()->action([self::class, 'update'], $data);
 		} else {
 			$entityView = EntityView::getClass($type);
 			if ($entityView)

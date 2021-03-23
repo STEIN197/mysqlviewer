@@ -21,10 +21,15 @@ class Table extends Entity {
 	}
 
 	public function update(array $data): void {
-		if ($data['TABLE_NAME'] !== $this->TABLE_NAME)
+		if ($data['TABLE_NAME'] && $data['TABLE_NAME'] !== $this->TABLE_NAME)
 			$this->rename($data['TABLE_NAME']);
+		if ($data['ENGINE'] && $data['ENGINE'] !== $this->ENGINE)
+			$this->setEngine($data['ENGINE']);
+		if ($data['TABLE_COLLATION'] && $data['TABLE_COLLATION'] !== $this->TABLE_COLLATION)
+			$this->setCollation($data['TABLE_COLLATION']);
+		// TODO: columns
 		$this->data = array_merge($this->data, $data);
-	} // TODO
+	}
 
 	public function truncate(): void {
 		$this->connection()->statement("TRUNCATE TABLE `{$this->TABLE_NAME}`");
@@ -52,14 +57,23 @@ class Table extends Entity {
 		return DB::connection("mysql:{$dbName}");
 	}
 
-	// private function rename(string $name): void {
-	// 	$this->connection()->statement("RENAME TABLE `{$this->TABLE_NAME}` TO `{$name}`");
-	// }
+	private function rename(string $name): void {
+		$this->connection()->statement("RENAME TABLE `{$this->id()}` TO `{$name}`");
+	}
 
-	public static function create(array $data): ?Table {} // TODO
+	private function setEngine(string $engine): void {
+		$this->connection()->statement("ALTER TABLE `{$this->id()}` ENGINE = `{$engine}`");
+	}
+
+	private function setCollation(string $collation): void {
+		$this->connection()->statement("ALTER TABLE `{$this->id()}` DEFAULT COLLATE = `{$collation}`");
+	}
+
+	// TODO
+	public static function create(array $data): ?Table {}
 
 	public static function read(string $id, array $data = []): ?Table {
-		$data = DB::select("SELECT * FROM `information_schema`.`TABLES` WHERE TABLE_NAME = '".addslashes($id)."' AND TABLE_SCHEMA = '".addslashes($data['schema'])."'");
+		$data = DB::select("SELECT * FROM `information_schema`.`TABLES` WHERE TABLE_NAME = '".addslashes($id)."' AND TABLE_SCHEMA = '".addslashes(@$data['schema'])."'");
 		return $data && sizeof($data) === 1 ? new self((array) $data[0]) : null;
 	}
 

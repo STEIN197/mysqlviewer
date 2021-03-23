@@ -1,6 +1,9 @@
 <?php
 namespace App\View;
 
+use App\Entity\Engine;
+use App\Entity\Schema;
+
 class TableView extends EntityView {
 
 	public function indexColumns(): array {
@@ -57,6 +60,52 @@ class TableView extends EntityView {
 			</tbody>
 		</table>
 		<a href="<?= route('create', ['type' => 'row', 'schema' => $this->entity->schema()->id(), 'table' => $this->entity->id()]) ?>" class="btn btn-primary btn-sm"><?= __('entity.action.create') ?></a>
+		<?
+		return ob_get_clean();
+	}
+
+	protected function renderActionCreate(): string {
+		return $this->renderEdit();
+	}
+
+	protected function renderActionUpdate(): string {
+		return $this->renderEdit();
+	}
+
+	protected function renderEdit(): string {
+		ob_start();
+		?>
+		<input type="hidden" name="schema" value="<?= request()->schema ?>"/>
+		<table class="table table-sm table-bordered table-light table-props">
+			<tbody>
+				<tr>
+					<td><?= __('entity.type.table.column.TABLE_NAME') ?></td>
+					<td>
+						<input type="text" name="TABLE_NAME" required="" value="<?= $this->entity ? $this->entity->id() : '' ?>"/>
+					</td>
+				</tr>
+				<tr>
+					<td><?= __('entity.type.table.column.ENGINE') ?></td>
+					<th>
+						<select name="ENGINE" required="">
+							<? foreach (Engine::list() as $engine): ?>
+								<option value="<?= $engine->id() ?>" <?= $this->entity && $this->entity->ENGINE === $engine->id() ? 'selected=""' : '' ?> ><?= $engine->id() ?></option>
+							<? endforeach ?>
+						</select>
+					</th>
+				</tr>
+				<tr>
+					<td><?= __('entity.type.table.column.TABLE_COLLATION') ?></td>
+					<th>
+						<select name="TABLE_COLLATION" required="">
+							<? foreach (Schema::collations() as $collation): ?>
+								<option value="<?= $collation ?>" <?= $this->entity && $this->entity->TABLE_COLLATION === $collation ? 'selected=""' : '' ?> ><?= $collation ?></option>
+							<? endforeach ?>
+						</select>
+					</th>
+				</tr>
+			</tbody>
+		</table>
 		<?
 		return ob_get_clean();
 	}
