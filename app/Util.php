@@ -23,6 +23,10 @@ final class Util {
 		return self::isBool($value) ? isset(self::$_BOOL_MAP[$value]) : null;
 	}
 
+	public static function isNumeric(string $value): bool {
+		return (string) (float) $value === $value;
+	}
+
 	public static function formatBytes(int $bytes): string {
 		static $powers = [
 			'B',

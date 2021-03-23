@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Generator;
 use Illuminate\Support\Facades\DB;
 use \Illuminate\Database\Connection;
 
@@ -9,6 +10,10 @@ class Table extends Entity {
 
 	public function id(): string {
 		return $this->TABLE_NAME;
+	}
+
+	public function schema(): Schema {
+		return Schema::read($this->TABLE_SCHEMA);
 	}
 
 	public function delete(): void {
@@ -25,30 +30,22 @@ class Table extends Entity {
 		$this->connection()->statement("TRUNCATE TABLE `{$this->TABLE_NAME}`");
 	}
 
-	public function rows(): array {
-		return $this->connection()->select("SELECT * FROM `{$this->TABLE_NAME}`");
+	public function rows(): Generator {
+		$result = $this->connection()->select("SELECT * FROM `{$this->TABLE_NAME}`");
+		foreach ($result as $row)
+			yield new Row((array) $row);
 	}
 
-	// public function columns(): array {
-	// 	$result = DB::select("SELECT * FROM `information_schema`.`COLUMNS` WHERE TABLE_NAME = '{$this->TABLE_NAME}' AND TABLE_SCHEMA = '{$this->TABLE_SCHEMA}' ORDER BY ORDINAL_POSITION");
-	// 	return array_combine(
-	// 		array_column(
-	// 			array_map(
-	// 				function ($v) {
-	// 					return (array) $v;
-	// 				},
-	// 				$result
-	// 			),
-	// 			'COLUMN_NAME'
-	// 		),
-	// 		$result
-	// 	);
-	// }
+	public function columns(): Generator {
+		$result = DB::select("SELECT * FROM `information_schema`.`COLUMNS` WHERE TABLE_NAME = '{$this->TABLE_NAME}' AND TABLE_SCHEMA = '{$this->TABLE_SCHEMA}' ORDER BY `ORDINAL_POSITION`");
+		foreach ($result as $row)
+			yield new Column((array) $row);
+	}
 
-	// public function hasPrimaryKey(): bool {
-	// 	$result = DB::select("SELECT * FROM `information_schema`.`TABLE_CONSTRAINTS` WHERE TABLE_NAME = '{$this->TABLE_NAME}' AND TABLE_SCHEMA = '{$this->TABLE_SCHEMA}' AND CONSTRAINT_TYPE = 'PRIMARY KEY'");
-	// 	return sizeof($result) > 0;
-	// }
+	public function hasPrimaryKey(): bool {
+		$result = DB::select("SELECT * FROM `information_schema`.`TABLE_CONSTRAINTS` WHERE TABLE_NAME = '{$this->TABLE_NAME}' AND TABLE_SCHEMA = '{$this->TABLE_SCHEMA}' AND CONSTRAINT_TYPE = 'PRIMARY KEY'");
+		return sizeof($result) > 0;
+	}
 
 	private function connection(): Connection {
 		$dbName = strtolower($this->TABLE_SCHEMA);
@@ -62,8 +59,8 @@ class Table extends Entity {
 	public static function create(array $data): ?Table {} // TODO
 
 	public static function read(string $id, array $data = []): ?Table {
-		$data = DB::select("SELECT * FROM `information_schema`.`TABLES` WHERE TABLE_NAME = '".addslashes($id)."' AND TABLE_SCHEMA = '".addslashes($data['TABLE_SCHEMA'])."'");
-		return $data && sizeof($data) === 0 ? new self((array) $data[0]) : null;
+		$data = DB::select("SELECT * FROM `information_schema`.`TABLES` WHERE TABLE_NAME = '".addslashes($id)."' AND TABLE_SCHEMA = '".addslashes($data['schema'])."'");
+		return $data && sizeof($data) === 1 ? new self((array) $data[0]) : null;
 	}
 
 	protected static function listQuery(array $data = []): string {
