@@ -8,6 +8,7 @@ use App\Models\Page;
 use App\Entity\Entity;
 use App\View\EntityView;
 
+// TODO: Сделать кастомный возврат урлов из entity
 class EntityController extends Controller {
 
 	public function index(Request $request, string $type = null) {

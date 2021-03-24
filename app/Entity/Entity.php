@@ -22,7 +22,10 @@ abstract class Entity {
 	public function __get(string $property) {
 		if (isset($this->data[$property]))
 			return $this->data[$property];
-		throw new Exception("No property with name '{$property}'");
+		$data = [];
+		foreach ($this->data as $key => $value)
+			$data[] = "{$key}: {$value}";
+		throw new Exception("No property with name '{$property}'. Data: {".join(', ', $data).'}');
 	}
 
 	public function __set(string $property, $value) {

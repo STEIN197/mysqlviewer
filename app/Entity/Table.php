@@ -38,11 +38,11 @@ class Table extends Entity {
 	public function rows(): Generator {
 		$result = $this->connection()->select("SELECT * FROM `{$this->TABLE_NAME}`");
 		foreach ($result as $row)
-			yield new Row((array) $row);
+			yield new Row((array) $row, $this);
 	}
 
 	public function columns(): Generator {
-		$result = DB::select("SELECT * FROM `information_schema`.`COLUMNS` WHERE TABLE_NAME = '{$this->TABLE_NAME}' AND TABLE_SCHEMA = '{$this->TABLE_SCHEMA}' ORDER BY `ORDINAL_POSITION`");
+		$result = DB::select("SELECT * FROM `information_schema`.`COLUMNS` WHERE `TABLE_NAME` = '{$this->TABLE_NAME}' AND `TABLE_SCHEMA` = '{$this->TABLE_SCHEMA}' ORDER BY `ORDINAL_POSITION`");
 		foreach ($result as $row)
 			yield new Column((array) $row);
 	}
@@ -50,6 +50,11 @@ class Table extends Entity {
 	public function hasPrimaryKey(): bool {
 		$result = DB::select("SELECT * FROM `information_schema`.`TABLE_CONSTRAINTS` WHERE TABLE_NAME = '{$this->TABLE_NAME}' AND TABLE_SCHEMA = '{$this->TABLE_SCHEMA}' AND CONSTRAINT_TYPE = 'PRIMARY KEY'");
 		return sizeof($result) > 0;
+	}
+
+	public function primaryKey(): ?Column {
+		$result = DB::select("SELECT * FROM `information_schema`.`COLUMNS` WHERE TABLE_NAME = '{$this->TABLE_NAME}' AND TABLE_SCHEMA = '{$this->TABLE_SCHEMA}' AND `COLUMN_KEY` = 'PRI'");
+		return sizeof($result) === 1 ? new Column((array) $result[0]) : null;
 	}
 
 	private function connection(): Connection {
