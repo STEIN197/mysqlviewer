@@ -64,6 +64,7 @@ class Table extends Entity {
 
 	private function rename(string $name): void {
 		$this->connection()->statement("RENAME TABLE `{$this->id()}` TO `{$name}`");
+		$this->TABLE_NAME = $name;
 	}
 
 	private function setEngine(string $engine): void {
@@ -76,11 +77,11 @@ class Table extends Entity {
 
 	private function updateColumns(array $data): void {
 		foreach ($data['column'] as $colName => $colParams) {
-			if ((string) (int) $colName === $colName) {
+			if ((string) (int) $colName == $colName) {
 				Column::create(array_merge([
 					'table' => $this->id(),
 					'schema' => $this->TABLE_SCHEMA
-				], $data));
+				], $colParams));
 			} else {
 				Column::read($colName, [
 					'table' => $this->id(),
@@ -91,7 +92,23 @@ class Table extends Entity {
 	}
 
 	// TODO
-	public static function create(array $data): ?Table {}
+	public static function create(array $data): ?Table {
+		$colQ = [];
+		foreach ($data['column'] as $colProps) {
+			$q = "`{$colProps['COLUMN_NAME']}` {$colProps['DATA_TYPE']} ";
+			$q .= @$colProps['IS_NULLABLE'] ? 'NULL' : 'NOT NULL';
+			if ($colProps['COLUMN_DEFAULT'])
+				$q .= " DEFAULT '{$colProps['COLUMN_DEFAULT']}'";
+			if (@$colProps['EXTRA'])
+				$q .= ' AUTO_INCREMENT';
+			$q .= " COLLATE `{$colProps['COLLATION_NAME']}`";
+			$colQ[] = $q;
+		}
+		$colQ = join(', ', $colQ);
+		$q = "CREATE TABLE `{$data['schema']}`.`{$data['TABLE_NAME']}` ({$colQ}) ENGINE = `{$data['ENGINE']}` DEFAULT COLLATE = `{$data['TABLE_COLLATION']}`";
+		DB::statement($q);
+		return self::read($data['TABLE_NAME'], $data);
+	}
 
 	public static function read(string $id, array $data = []): ?Table {
 		$data = DB::select("SELECT * FROM `information_schema`.`TABLES` WHERE TABLE_NAME = '".addslashes($id)."' AND TABLE_SCHEMA = '".addslashes(@$data['schema'])."'");
