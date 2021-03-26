@@ -20,7 +20,7 @@ abstract class Entity {
 	public function truncate(): void {}
 
 	public function __get(string $property) {
-		if (isset($this->data[$property]))
+		if (in_array($property, array_keys($this->data)))
 			return $this->data[$property];
 		$data = [];
 		foreach ($this->data as $key => $value)

@@ -49,6 +49,10 @@ abstract class EntityView {
 		return '';
 	}
 
+	public static function route(string $action, array $data): string {
+		return '';
+	}
+
 	public abstract function indexActions(): array;
 	public abstract function indexColumns(): array;
 }

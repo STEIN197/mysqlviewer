@@ -16,6 +16,7 @@ class Column extends Entity {
 		DB::statement("ALTER TABLE `{$this->TABLE_SCHEMA}`.`{$this->TABLE_NAME}` DROP COLUMN `{$this->id()}`");
 	}
 
+	// TODO
 	public function update(array $data): void {
 		if (strtolower($data['DATA_TYPE']) !== $this->DATA_TYPE)
 			$this->setType($data['DATA_TYPE'], (int) $data['SIZE']);
@@ -58,14 +59,43 @@ class Column extends Entity {
 		DB::statement("ALTER TABLE `{$this->TABLE_SCHEMA}`.`{$this->TABLE_NAME}` MODIFY COLUMN `{$this->id()}` ".($value ? 'NULL' : 'NOT NULL'));
 	}
 	
+	// TODO
 	public static function create(array $data): ?Column {
-		DB::statement("ALTER TABLE `{$data['schema']}`.`{$data['table']}` ADD COLUMN `{$data['COLUMN_NAME']}`");
-		return self::read($data['COLUMN_NAME'], $data);
+		// DB::statement("ALTER TABLE `{$data['schema']}`.`{$data['table']}` ADD COLUMN `{$data['COLUMN_NAME']}`");
+		// return self::read($data['COLUMN_NAME'], $data);
 	}
 
 	public static function read(string $id, array $data = []): ?Column {
 		$result = DB::select("SELECT * FROM `information_schema`.`COLUMNS` WHERE `COLUMN_NAME` = '{$id}' AND `TABLE_NAME` = '{$data['table']}' AND `TABLE_SCHEMA` = '{$data['schema']}'");
 		return $result && sizeof($result) === 1 ? new self((array) $result[0]) : null;
+	}
+
+	public static function dataTypes(): array {
+		return [
+			'TINYINT',
+			'SMALLINT',
+			'MEDIUMINT',
+			'INT',
+			'BIGINT',
+			'DECIMAL',
+			'NUMERIC',
+			'FLOAT',
+			'DOUBLE',
+			'YEAR',
+			'BIT',
+			'DATE',
+			'DATETIME',
+			'TIMESTAMP',
+			'TIME',
+			'TINYTEXT',
+			'TEXT',
+			'MEDIUMTEXT',
+			'LONGTEXT',
+			'SET',
+			'ENUM',
+			'CHAR',
+			'VARCHAR',
+		];
 	}
 
 	protected static function listQuery(array $data): string {

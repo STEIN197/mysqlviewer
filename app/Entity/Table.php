@@ -27,7 +27,7 @@ class Table extends Entity {
 			$this->setEngine($data['ENGINE']);
 		if ($data['TABLE_COLLATION'] && $data['TABLE_COLLATION'] !== $this->TABLE_COLLATION)
 			$this->setCollation($data['TABLE_COLLATION']);
-		// TODO: columns
+		$this->updateColumns($data);
 		$this->data = array_merge($this->data, $data);
 	}
 
@@ -72,6 +72,22 @@ class Table extends Entity {
 
 	private function setCollation(string $collation): void {
 		$this->connection()->statement("ALTER TABLE `{$this->id()}` DEFAULT COLLATE = `{$collation}`");
+	}
+
+	private function updateColumns(array $data): void {
+		foreach ($data['column'] as $colName => $colParams) {
+			if ((string) (int) $colName === $colName) {
+				Column::create(array_merge([
+					'table' => $this->id(),
+					'schema' => $this->TABLE_SCHEMA
+				], $data));
+			} else {
+				Column::read($colName, [
+					'table' => $this->id(),
+					'schema' => $this->TABLE_SCHEMA
+				])->update($colParams);
+			}
+		}
 	}
 
 	// TODO

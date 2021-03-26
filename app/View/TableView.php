@@ -1,8 +1,10 @@
 <?php
 namespace App\View;
 
+use App\Util;
 use App\Entity\Engine;
 use App\Entity\Schema;
+use App\Entity\Column;
 
 class TableView extends EntityView {
 
@@ -27,7 +29,7 @@ class TableView extends EntityView {
 			$columns[$column->id()] = $column;
 		ob_start();
 		?>
-		<table class="table table-sm table-bordered table-light table-props">
+		<table class="table table-sm table-bordered table-light table-props" style="white-space:nowrap">
 			<thead class="thead-dark">
 				<tr>
 					<? if ($this->entity->hasPrimaryKey()): ?>
@@ -105,6 +107,83 @@ class TableView extends EntityView {
 					</th>
 				</tr>
 			</tbody>
+		</table>
+		<p>Колонки</p>
+		<table class="table table-sm table-bordered table-light table-props table-columns">
+			<thead class="thead-dark">
+				<tr>
+					<th></th>
+					<th>Имя</th>
+					<th>Тип</th>
+					<th>По умолчанию</th>
+					<th>Сравнение</th>
+					<th>Nullable</th>
+					<th>Первичный</th>
+					<th>Индекс</th>
+					<th>AUTO_INCREMENT</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?
+				if ($this->entity):
+					foreach ($this->entity->columns() as $column):
+						$deleteRoute = route('delete', [
+							'type' => 'column',
+							'id' => $column->id(),
+							'table' => $this->entity->id(),
+							'schema' => $this->entity->TABLE_SCHEMA
+						]);
+						$columnDefault = Util::toBool($column->IS_NULLABLE) && $column->data()['COLUMN_DEFAULT'] === 'NULL' ? '' : $column->data()['COLUMN_DEFAULT'];
+						?>
+						<tr>
+							<td>
+								<a href="<?= $deleteRoute ?>"><?= __('entity.action.delete') ?></a>
+							</td>
+							<td>
+								<input type="text" name="column[<?= $column->id() ?>][COLUMN_NAME]" value="<?= $column->id() ?>"/>
+							</td>
+							<td>
+								<select name="column[<?= $column->id() ?>][DATA_TYPE]">
+									<? foreach (Column::dataTypes() as $type): ?>
+										<option value="<?= $type ?>" <?= strtolower($type) === strtolower($column->DATA_TYPE) ? 'selected=""' : '' ?>><?= $type ?></option>
+									<? endforeach ?>
+								</select>
+							</td>
+							<td>
+								<input type="text" name="column[<?= $column->id() ?>][COLUMN_DEFAULT]" value="<?= htmlentities($columnDefault) ?>"/>
+							</td>
+							<td>
+								<select name="column[<?= $column->id() ?>][COLLATION_NAME]">
+									<? foreach (Schema::collations() as $collation): ?>
+										<option value="<?= $collation ?>" <?= $collation === $column->COLLATION_NAME ? 'selected' : '' ?>><?= $collation ?></option>
+									<? endforeach ?>
+								</select>
+							</td>
+							<td>
+								<input type="checkbox" name="column[<?= $column->id() ?>][IS_NULLABLE]" <?= Util::toBool($column->IS_NULLABLE) ? 'checked=""' : '' ?>/>
+							</td>
+							<td>
+								<input type="radio" name="PRIMARY" value="<?= $column->id() ?>" <?= $column->COLUMN_KEY === 'PRI' ? 'checked=""' : '' ?>/>
+							</td>
+							<td>
+								<input type="checkbox" name="column[<?= $column->id() ?>][COLUMN_KEY]" <?= $column->COLUMN_KEY === 'MUL' ? 'checked=""' : '' ?>/>
+							</td>
+							<td>
+								<input type="checkbox" name="column[<?= $column->id() ?>][EXTRA]" <?= $column->EXTRA === 'auto_increment' ? 'checked=""' : '' ?>/>
+							</td>
+						</tr>
+						<?
+					endforeach;
+				endif;
+				?>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="9" class="text-center">
+						<button type="button" class="btn btn-primary btn-sm js-create-column" data-index="0">Ещё</button>
+					</td>
+				</tr>
+			</tfoot>
 		</table>
 		<?
 		return ob_get_clean();

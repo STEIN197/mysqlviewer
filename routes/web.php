@@ -19,6 +19,7 @@ function crud(): array {
 Route::middleware(Main::class)->group(function() {
 	Route::prefix('api')->group(function() {
 		Route::get('/', [ApiController::class, 'index']);
+		Route::get('create/column', [ApiController::class, 'createColumnView']);
 	});
 
 	Route::get('/logout/', [LoginController::class, 'logout'])->name('logout');

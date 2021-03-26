@@ -71,7 +71,7 @@ class Row extends Entity {
 		}, $colQ)).')';
 		$q .= ' VALUES ('.join(', ', $valQ).')';
 		DB::statement($q);
-		return new self($data, $table);
+		return $table->hasPrimaryKey() ? new self($data, $table) : null;
 	}
 
 	public static function read(string $id, array $data = []): ?Row {

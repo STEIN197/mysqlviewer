@@ -112,4 +112,16 @@ class RowView extends EntityView {
 	private function table(): Table {
 		return Table::read(request()->table, request()->all());
 	}
+
+	public static function route(string $action, array $data): string {
+		switch (strtolower($action)) {
+			case 'index': {
+				return route('read', [
+					'id' => $data['table'],
+					'type' => 'table',
+					'schema' => $data['schema']
+				]);
+			}
+		}
+	}
 }
