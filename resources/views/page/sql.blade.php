@@ -3,13 +3,24 @@
 		<x-sidebar/>
 	</section>
 	<section id="content" class="split-pane" data-size="80">
-		<div id="editor"></div>
+		<textarea style="width:100%;resize:none" rows="10"></textarea>
+		<button class="btn btn-primary btn-sm js-query">Запрос</button>
+		{{-- <div id="editor"></div> --}}
+		<div id="result"></div>
 	</section>
 </div>
 <script>
 	document.addEventListener("DOMContentLoaded", function() {
-		var editor = ace.edit("editor");
-		editor.setTheme("ace/theme/monokai");
+		$(".js-query").click(async () => {
+			let result = await axios.get("/api/sql/", {
+				params: {
+					query: $("textarea").val()
+				}
+			});
+			$("#result").html(result.data.message || result.data.data);
+		});
+		// var editor = ace.edit("editor");
+		// editor.setTheme("ace/theme/monokai");
 		// editor.session.setMode("ace/mode/sql");
 	});
 </script>

@@ -20,6 +20,7 @@ Route::middleware(Main::class)->group(function() {
 	Route::prefix('api')->group(function() {
 		Route::get('/', [ApiController::class, 'index']);
 		Route::get('create/column', [ApiController::class, 'createColumnView']);
+		Route::get('sql', [ApiController::class, 'sql']);
 	});
 
 	Route::get('/logout/', [LoginController::class, 'logout'])->name('logout');
@@ -29,6 +30,7 @@ Route::middleware(Main::class)->group(function() {
 		Route::get('/', [LoginController::class, 'index'])->name('home');
 		Route::prefix('admin')->group(function () {
 			Route::get("/", [AdminController::class, 'index'])->name('admin');
+			Route::get("/sql/", [AdminController::class, 'sql'])->name('sql');
 			Route::middleware(EntityExistance::class)->group(function () {
 				Route::get("/{type}/", [EntityController::class, 'index'])->name("index");
 				foreach (crud() as $action) {

@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Locale;
 use App\Entity\Column;
+use Illuminate\Support\Facades\DB;
 use App\Entity\Schema;
+use App\PDOWrapper;
 
 class ApiController extends Controller
 {
@@ -56,6 +58,45 @@ class ApiController extends Controller
 		</tr>
 		<?
 		return ob_get_clean();
+	}
+
+	public function sql(Request $request) {
+		$pdo = app()->make(PDOWrapper::class)->getPdo();
+		try {
+			$result = $pdo->query($request->all()['query']);
+			$errorInfo = $pdo->errorInfo();
+			if ($errorInfo && $errorInfo[2])
+				return response()->json([
+					'message' => "{$errorInfo[0]}\n{$errorInfo[1]}\n{$errorInfo[2]}"
+				]);
+			$result = $result->fetchAll(\PDO::FETCH_ASSOC);
+			ob_start();
+			?>
+			<table class="table table-sm table-bordered table-light table-props table-columns" style="white-space:nowrap">
+				<thead class="thead-dark">
+					<? foreach ($result[0] as $col => $row): ?>
+						<th><?= $col ?></th>
+					<? endforeach ?>
+				</thead>
+				<tbody>
+					<? foreach ($result as $row): ?>
+						<tr>
+							<? foreach ($row as $value): ?>
+								<td><?= mb_convert_encoding($value, 'UTF-8') ?></td>
+							<? endforeach ?>
+						</tr>
+					<? endforeach ?>
+				</tbody>
+			</table>
+			<?
+			return response()->json([
+				'data' => ob_get_clean()
+			]);
+		} catch (\Exception $e) {
+			return response()->json([
+				'message' => $e->getMessage()
+			]);
+		}
 	}
 
 	public function setLocale(string $locale) {

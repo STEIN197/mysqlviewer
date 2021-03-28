@@ -11,4 +11,8 @@ class AdminController extends Controller {
 	public function index(Request $request) {
 		return Page::new('admin')->render();
 	}
+
+	public function sql(Request $request) {
+		return Page::new('sql')->render();
+	}
 }
