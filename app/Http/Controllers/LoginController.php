@@ -19,7 +19,7 @@ class LoginController extends Controller {
 		if (auth()->login($request->all()))
 			return redirect()->route('admin');
 		return redirect('/')->withErrors([
-			'connection' => ',kzlbotfj'
+			'connection' => ' '
 		]);
 	}
 
